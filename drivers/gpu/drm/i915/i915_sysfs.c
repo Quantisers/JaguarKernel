@@ -347,7 +347,7 @@ static ssize_t gt_max_freq_mhz_show(struct device *kdev, struct device_attribute
 	flush_delayed_work(&dev_priv->rps.delayed_resume_work);
 
 	mutex_lock(&dev_priv->rps.hw_lock);
-	ret = intel_gpu_freq(dev_priv, dev_priv->rps.max_freq_softlimit);
+	ret = dev_priv->rps.hw_max * GT_FREQUENCY_MULTIPLIER;
 	mutex_unlock(&dev_priv->rps.hw_lock);
 
 	return snprintf(buf, PAGE_SIZE, "%d\n", ret);
@@ -360,7 +360,7 @@ static ssize_t gt_max_freq_mhz_store(struct device *kdev,
 	struct drm_minor *minor = dev_to_drm_minor(kdev);
 	struct drm_device *dev = minor->dev;
 	struct drm_i915_private *dev_priv = dev->dev_private;
-	u32 val;
+	u32 val, rp_state_cap, hw_max, hw_min, non_oc_max;
 	ssize_t ret;
 
 	ret = kstrtou32(buf, 0, &val);
@@ -371,7 +371,10 @@ static ssize_t gt_max_freq_mhz_store(struct device *kdev,
 
 	mutex_lock(&dev_priv->rps.hw_lock);
 
-	val = intel_freq_opcode(dev_priv, val);
+	rp_state_cap = I915_READ(GEN6_RP_STATE_CAP);
+	hw_max = dev_priv->rps.hw_max;
+	non_oc_max = (rp_state_cap & 0xff);
+	hw_min = ((rp_state_cap & 0xff0000) >> 16);
 
 	if (val < dev_priv->rps.min_freq ||
 	    val > dev_priv->rps.max_freq ||
@@ -380,9 +383,12 @@ static ssize_t gt_max_freq_mhz_store(struct device *kdev,
 		return -EINVAL;
 	}
 
-	if (val > dev_priv->rps.rp0_freq)
+	if (val > non_oc_max)
 		DRM_DEBUG("User requested overclocking to %d\n",
-			  intel_gpu_freq(dev_priv, val));
+			  val * GT_FREQUENCY_MULTIPLIER);
+
+	if (dev_priv->rps.cur_delay > val)
+		gen6_set_rps(dev_priv->dev, val);
 
 	dev_priv->rps.max_freq_softlimit = val;
 
@@ -434,7 +440,9 @@ static ssize_t gt_min_freq_mhz_store(struct device *kdev,
 
 	mutex_lock(&dev_priv->rps.hw_lock);
 
-	val = intel_freq_opcode(dev_priv, val);
+	rp_state_cap = I915_READ(GEN6_RP_STATE_CAP);
+	hw_max = dev_priv->rps.hw_max;
+	hw_min = ((rp_state_cap & 0xff0000) >> 16);
 
 	if (val < dev_priv->rps.min_freq ||
 	    val > dev_priv->rps.max_freq ||

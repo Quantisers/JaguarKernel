@@ -5461,7 +5461,12 @@ static void cherryview_enable_rps(struct drm_device *dev)
 	 * hasn't enabled a state yet where we need forcewake, BIOS may have.*/
 	intel_uncore_forcewake_get(dev_priv, FORCEWAKE_ALL);
 
-	/*  Disable RC states. */
+	/* In units of 50MHz */
+	dev_priv->rps.hw_max = dev_priv->rps.max_delay = rp_state_cap & 0xff;
+	dev_priv->rps.min_delay = (rp_state_cap & 0xff0000) >> 16;
+	dev_priv->rps.cur_delay = 0;
+
+	/* disable the counters and set deterministic thresholds */
 	I915_WRITE(GEN6_RC_CONTROL, 0);
 
 	/* 2a: Program RC6 thresholds.*/
@@ -5507,7 +5512,47 @@ static void cherryview_enable_rps(struct drm_device *dev)
 		   GEN6_RP_MEDIA_IS_GFX |
 		   GEN6_RP_ENABLE |
 		   GEN6_RP_UP_BUSY_AVG |
-		   GEN6_RP_DOWN_IDLE_AVG);
+		   (IS_HASWELL(dev) ? GEN7_RP_DOWN_IDLE_AVG : GEN6_RP_DOWN_IDLE_CONT));
+
+	ret = sandybridge_pcode_write(dev_priv, GEN6_PCODE_WRITE_MIN_FREQ_TABLE, 0);
+	if (!ret && (IS_GEN6(dev) || IS_IVYBRIDGE(dev))) {
+		pcu_mbox = 0;
+		ret = sandybridge_pcode_read(dev_priv, GEN6_READ_OC_PARAMS, &pcu_mbox);
+		if (!ret && (pcu_mbox & (1<<31))) { /* OC supported */
+			DRM_DEBUG_DRIVER("overclocking supported, adjusting frequency max from %dMHz to %dMHz\n",
+					 (dev_priv->rps.max_delay & 0xff) * 50,
+					 (pcu_mbox & 0xff) * 50);
+			dev_priv->rps.hw_max = pcu_mbox & 0xff;
+			dev_priv->rps.max_delay = pcu_mbox & 0xff;
+		}
+	} else {
+		DRM_DEBUG_DRIVER("Failed to set the min frequency\n");
+	}
+
+	gen6_set_rps(dev_priv->dev, (gt_perf_status & 0xff00) >> 8);
+
+	/* requires MSI enabled */
+	I915_WRITE(GEN6_PMIER, GEN6_PM_DEFERRED_EVENTS);
+	spin_lock_irq(&dev_priv->rps.lock);
+	WARN_ON(dev_priv->rps.pm_iir != 0);
+	I915_WRITE(GEN6_PMIMR, 0);
+	spin_unlock_irq(&dev_priv->rps.lock);
+	/* enable all PM interrupts */
+	I915_WRITE(GEN6_PMINTRMSK, 0);
+
+	rc6vids = 0;
+	ret = sandybridge_pcode_read(dev_priv, GEN6_PCODE_READ_RC6VIDS, &rc6vids);
+	if (IS_GEN6(dev) && ret) {
+		DRM_DEBUG_DRIVER("Couldn't check for BIOS workaround\n");
+	} else if (IS_GEN6(dev) && (GEN6_DECODE_RC6_VID(rc6vids & 0xff) < 450)) {
+		DRM_DEBUG_DRIVER("You should update your BIOS. Correcting minimum rc6 voltage (%dmV->%dmV)\n",
+			  GEN6_DECODE_RC6_VID(rc6vids & 0xff), 450);
+		rc6vids &= 0xffff00;
+		rc6vids |= GEN6_ENCODE_RC6_VID(450);
+		ret = sandybridge_pcode_write(dev_priv, GEN6_PCODE_WRITE_RC6VIDS, rc6vids);
+		if (ret)
+			DRM_ERROR("Couldn't fix incorrect rc6 voltage\n");
+	}
 
 	/* Setting Fixed Bias */
 	val = VLV_OVERRIDE_EN |
