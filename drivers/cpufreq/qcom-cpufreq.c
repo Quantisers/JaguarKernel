@@ -153,8 +153,8 @@ static int msm_cpufreq_init(struct cpufreq_policy *policy)
 		if (cpu_clk[cpu] == cpu_clk[policy->cpu])
 			cpumask_set_cpu(cpu, policy->cpus);
 
-	if (cpufreq_frequency_table_cpuinfo(policy, table))
-	{
+	ret = cpufreq_table_validate_and_show(policy, table);
+	if (ret) {
 		// AP: set default frequencies to prevent overclocking or underclocking during start
 		if (policy->cpu <= 3)
 		{
@@ -169,6 +169,7 @@ static int msm_cpufreq_init(struct cpufreq_policy *policy)
 		}
 
 		pr_err("cpufreq: failed to get policy min/max\n");
+		return ret;
 	}
 
 	// AP: set default frequencies to prevent overclocking or underclocking during start
@@ -205,7 +206,6 @@ static int msm_cpufreq_init(struct cpufreq_policy *policy)
 	pr_debug("cpufreq: cpu%d init at %d switching to %d\n",
 			policy->cpu, cur_freq, table[index].frequency);
 	policy->cur = table[index].frequency;
-	policy->freq_table = table;
 #ifdef CONFIG_MSM_TRACK_FREQ_TARGET_INDEX
 	policy->cur_index = index;
 #endif
