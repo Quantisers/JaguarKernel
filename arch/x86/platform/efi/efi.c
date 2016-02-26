@@ -162,7 +162,9 @@ static void __init do_add_efi_memmap(void)
 int __init efi_memblock_x86_reserve_range(void)
 {
 	struct efi_info *e = &boot_params.efi_info;
-	unsigned long pmap;
+	struct efi_memory_map_data data;
+	phys_addr_t pmap;
+	int rv;
 
 	if (efi_enabled(EFI_PARAVIRT))
 		return 0;
@@ -177,11 +179,17 @@ int __init efi_memblock_x86_reserve_range(void)
 #else
 	pmap = (e->efi_memmap |	((__u64)e->efi_memmap_hi << 32));
 #endif
-	memmap.phys_map		= (void *)pmap;
-	memmap.nr_map		= e->efi_memmap_size /
-				  e->efi_memdesc_size;
-	memmap.desc_size	= e->efi_memdesc_size;
-	memmap.desc_version	= e->efi_memdesc_version;
+	data.phys_map		= pmap;
+	data.size 		= e->efi_memmap_size;
+	data.desc_size		= e->efi_memdesc_size;
+	data.desc_version	= e->efi_memdesc_version;
+
+	rv = efi_memmap_init_early(&data);
+	if (rv)
+		return rv;
+
+	if (add_efi_memmap)
+		do_add_efi_memmap();
 
 	memblock_reserve(pmap, memmap.nr_map * memmap.desc_size);
 
@@ -210,15 +218,6 @@ static void __init print_efi_memmap(void)
 			(md->num_pages >> (20 - EFI_PAGE_SHIFT)));
 	}
 #endif  /*  EFI_DEBUG  */
-}
-
-void __init efi_unmap_memmap(void)
-{
-	clear_bit(EFI_MEMMAP, &efi.flags);
-	if (memmap.map) {
-		early_memunmap(memmap.map, memmap.nr_map * memmap.desc_size);
-		memmap.map = NULL;
-	}
 }
 
 static int __init efi_systab_init(void *phys)
@@ -406,28 +405,6 @@ static int __init efi_runtime_init(void)
 	return 0;
 }
 
-static int __init efi_memmap_init(void)
-{
-	if (efi_enabled(EFI_PARAVIRT))
-		return 0;
-
-	/* Map the EFI memory map */
-	memmap.map = early_memremap((unsigned long)memmap.phys_map,
-				   memmap.nr_map * memmap.desc_size);
-	if (memmap.map == NULL) {
-		pr_err("Could not map the memory map!\n");
-		return -ENOMEM;
-	}
-	memmap.map_end = memmap.map + (memmap.nr_map * memmap.desc_size);
-
-	if (add_efi_memmap)
-		do_add_efi_memmap();
-
-	set_bit(EFI_MEMMAP, &efi.flags);
-
-	return 0;
-}
-
 void __init efi_init(void)
 {
 	efi_char16_t *c16;
@@ -485,11 +462,11 @@ void __init efi_init(void)
 	if (!efi_runtime_supported())
 		pr_info("No EFI runtime due to 32/64-bit mismatch with kernel\n");
 	else {
-		if (efi_runtime_disabled() || efi_runtime_init())
+		if (efi_runtime_disabled() || efi_runtime_init()) {
+			efi_memmap_unmap();
 			return;
+		}
 	}
-	if (efi_memmap_init())
-		return;
 
 	print_efi_memmap();
 }
@@ -825,7 +802,7 @@ static void __init kexec_enter_virtual_mode(void)
 	 * non-native EFI
 	 */
 	if (!efi_is_native()) {
-		efi_unmap_memmap();
+		efi_memmap_unmap();
 		clear_bit(EFI_RUNTIME_SERVICES, &efi.flags);
 		return;
 	}

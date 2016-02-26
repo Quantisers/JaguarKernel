@@ -189,7 +189,7 @@ void __init efi_free_boot_services(void)
 		free_bootmem_late(start, size);
 	}
 
-	efi_unmap_memmap();
+	efi_memmap_unmap();
 }
 
 /*
@@ -256,8 +256,8 @@ void __init efi_apply_memmap_quirks(void)
 	 * services.
 	 */
 	if (!efi_runtime_supported()) {
-		pr_info("efi: Setup done, disabling due to 32/64-bit mismatch\n");
-		efi_unmap_memmap();
+		pr_info("Setup done, disabling due to 32/64-bit mismatch\n");
+		efi_memmap_unmap();
 	}
 
 	/*
