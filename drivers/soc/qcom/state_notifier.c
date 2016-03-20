@@ -1,8 +1,12 @@
 /*
  * State Notifier Driver
  *
+<<<<<<< HEAD
  * Copyright (c) 2013-2017, Pranav Vashi <neobuddy89@gmail.com>
  *           (c) 2017, Joe Maples <joe@frap129.org>
+=======
+ * Copyright (c) 2013-2016, Pranav Vashi <neobuddy89@gmail.com>
+>>>>>>> a58ef03... santoni: Add state notifier driver
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -21,6 +25,10 @@
  * debug = 1 will print all
  */
 static unsigned int debug;
+<<<<<<< HEAD
+=======
+module_param_named(debug_mask, debug, uint, 0644);
+>>>>>>> a58ef03... santoni: Add state notifier driver
 
 #define dprintk(msg...)		\
 do {				\
@@ -28,6 +36,11 @@ do {				\
 		pr_info(msg);	\
 } while (0)
 
+<<<<<<< HEAD
+=======
+static bool enabled;
+module_param_named(enabled, enabled, bool, 0664);
+>>>>>>> a58ef03... santoni: Add state notifier driver
 static unsigned int suspend_defer_time = DEFAULT_SUSPEND_DEFER_TIME;
 module_param_named(suspend_defer_time, suspend_defer_time, uint, 0664);
 static struct delayed_work suspend_work;
@@ -89,7 +102,11 @@ static void _resume_work(struct work_struct *work)
 void state_suspend(void)
 {
 	dprintk("%s: suspend called.\n", STATE_NOTIFIER);
+<<<<<<< HEAD
 	if (state_suspended || suspend_in_progress)
+=======
+	if (state_suspended || suspend_in_progress || !enabled)
+>>>>>>> a58ef03... santoni: Add state notifier driver
 		return;
 
 	suspend_in_progress = true;
@@ -110,10 +127,14 @@ void state_resume(void)
 
 static int __init state_notifier_init(void)
 {
+<<<<<<< HEAD
 	susp_wq =
 	    alloc_workqueue("state_susp_wq",
 			    WQ_HIGHPRI | WQ_UNBOUND | WQ_MEM_RECLAIM, 0);
 
+=======
+	susp_wq = create_singlethread_workqueue("state_susp_wq");
+>>>>>>> a58ef03... santoni: Add state notifier driver
 	if (!susp_wq)
 		pr_err("State Notifier failed to allocate suspend workqueue\n");
 
