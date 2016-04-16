@@ -207,8 +207,8 @@ config CPU_FREQ_DEFAULT_GOV_CULTIVATION
 
 
 config CPU_FREQ_DEFAULT_GOV_YANKACTIVE
- 	   bool "yankactive"
-  	   select CPU_FREQ_GOV_YANKACTIVE
+	   bool "yankactive"
+	   select CPU_FREQ_GOV_YANKACTIVE
 	   help
 	   Use the CPUFreq governor 'yankactive' as default. This allows
 	   you to get a full dynamic cpu frequency capable system by simply
@@ -260,6 +260,20 @@ config CPU_FREQ_DEFAULT_GOV_SAKURACTIVE
 	      the help section of the driver. Fallback governor will be the
 	      performance governor.
 	      
+config CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
+	bool "schedutil"
+	depends on SMP
+	select CPU_FREQ_GOV_SCHEDUTIL
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the 'schedutil' CPUFreq governor by default. If unsure,
+	  have a look at the help section of that governor. The fallback
+	  governor will be 'performance'.
+config CPU_FREQ_DEFAULT_GOV_LIONFISH
+	bool "lionfish"
+	select CPU_FREQ_GOV_LIONFISH
+	help
+	  Use the CPUFreq governor 'lionfish' as default.
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -520,6 +534,9 @@ config CPUFREQ_DT
 
 	  If in doubt, say N.
 
+config FINGERPRINT_BOOST
+	bool "Fingerprint Boost"
+	default y
 
 config CPU_FREQ_GOV_LIONFISH
 	tristate "'lionfish' governor"
