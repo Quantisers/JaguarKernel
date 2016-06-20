@@ -141,7 +141,7 @@ void efi_sync_low_kernel_mappings(void)
 
 int __init efi_setup_page_tables(unsigned long pa_memmap, unsigned num_pages)
 {
-	unsigned long text;
+	unsigned long pfn, text;
 	struct page *page;
 	unsigned npages;
 	pgd_t *pgd;
