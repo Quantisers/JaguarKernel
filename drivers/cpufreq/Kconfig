@@ -274,6 +274,13 @@ config CPU_FREQ_DEFAULT_GOV_LIONFISH
 	select CPU_FREQ_GOV_LIONFISH
 	help
 	  Use the CPUFreq governor 'lionfish' as default.
+	  
+config CPU_FREQ_DEFAULT_GOV_CULTIVATION
+	bool "cultivation"
+	select CPU_FREQ_GOV_CULTIVATION
+	help
+	Use the CPUFreq governor 'cultivation' as default.
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -568,7 +575,6 @@ config CPU_FREQ_GOV_LIONFISH
 	  module will be called cpufreq_lionfish.
 
 	  If in doubt, say N.
-
 
 config CPU_FREQ_GOV_IRONACTIVE
 	tristate "'ironactive' cpufreq policy governor"
