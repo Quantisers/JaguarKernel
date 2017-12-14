@@ -642,6 +642,19 @@ config MSM_BCL_PERIPHERAL_CTL
 	  provides routines to configure and monitor the BCL
 	  PMIC peripheral.
 
+config DISABLE_TEMP_PROTECT
+	bool "control of TEMP protect"
+	default n
+	help
+	  Say Y here to enable a function which disabled TEMP protect...
+	  WARNNING:Only SCM could open it.
+
+config FORCE_FAST_CHARGE
+	bool "Force faster charge rate for USB"
+  	default n
+  	help
+	  This allows users to override default charge rate for USB.
+
 source "drivers/power/reset/Kconfig"
 
 endif # POWER_SUPPLY
