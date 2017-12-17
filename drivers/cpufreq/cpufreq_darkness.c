@@ -307,7 +307,6 @@ static void cpufreq_darkness_timer(unsigned long data)
 		pcpu = &per_cpu(cpuinfo, i);
 		govinfo.cpu = i;
 		govinfo.load = pcpu->load;
-		govinfo.sampling_rate_us = tunables->timer_rate;
 		atomic_notifier_call_chain(&cpufreq_govinfo_notifier_list,
 					   CPUFREQ_LOAD_CHANGE, &govinfo);
 	}
