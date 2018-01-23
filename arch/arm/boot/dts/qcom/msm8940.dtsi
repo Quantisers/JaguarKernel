@@ -572,7 +572,15 @@
 	/delete-node/qcom,gpu-pwrlevel-bins;
 	/delete-node/qcom,gpu-pwrlevels;
 
-	qcom,gpu-pwrlevel-bins {
+		//Special features:
+		qcom,tsens-name = "tsens_tz_sensor10"; //enable sensor name for GPU temperature monitoring 
+		qcom,soft-start-enable = <0x1>; //enable soft start to start without current peaks that can damage device
+		qcom,hpm-enable = <0x1>; //enable high power mode
+		qcom,boost-current-limit = <14>; //3200mA maximum
+		com,ocp-enable = <1>; //enables over current protection
+		qcom,l2pc-cpu-mask = <0x000000F0>; // Avoid L2PC on big cluster CPUs (CPU 4,5,6,7)
+
+		qcom,gpu-pwrlevel-bins {
 		#address-cells = <1>;
 		#size-cells = <0>;
 
@@ -586,9 +594,27 @@
 			qcom,speed-bin = <0>;
 			qcom,initial-pwrlevel = <3>;
 
-			/* SUPER TURBO */
+			/* OVERCLOCK II */
 			qcom,gpu-pwrlevel@0 {
 				reg = <0>;
+				qcom,gpu-freq = <600000000>;
+				qcom,bus-freq = <10>;
+				qcom,bus-min = <10>;
+				qcom,bus-max = <10>;
+			};
+
+			/* OVERCLOCK I */
+			qcom,gpu-pwrlevel@1 {
+				reg = <1>;
+				qcom,gpu-freq = <520000000>;
+				qcom,bus-freq = <10>;
+				qcom,bus-min = <10>;
+				qcom,bus-max = <10>;
+			};
+
+			/* SUPER TURBO */
+			qcom,gpu-pwrlevel@2 {
+				reg = <2>;
 				qcom,gpu-freq = <475000000>;
 				qcom,bus-freq = <10>;
 				qcom,bus-min = <10>;
@@ -596,8 +622,8 @@
 			};
 
 			/* TURBO */
-			qcom,gpu-pwrlevel@1 {
-				reg = <1>;
+			qcom,gpu-pwrlevel@3 {
+				reg = <3>;
 				qcom,gpu-freq = <450000000>;
 				qcom,bus-freq = <9>;
 				qcom,bus-min = <9>;
@@ -605,8 +631,8 @@
 			};
 
 			/* NOM+ */
-			qcom,gpu-pwrlevel@2 {
-				reg = <2>;
+			qcom,gpu-pwrlevel@4 {
+				reg = <4>;
 				qcom,gpu-freq = <400000000>;
 				qcom,bus-freq = <7>;
 				qcom,bus-min = <6>;
@@ -614,8 +640,8 @@
 			};
 
 			/* NOM */
-			qcom,gpu-pwrlevel@3 {
-				reg = <3>;
+			qcom,gpu-pwrlevel@5 {
+				reg = <5>;
 				qcom,gpu-freq = <375000000>;
 				qcom,bus-freq = <6>;
 				qcom,bus-min = <5>;
@@ -623,8 +649,8 @@
 			};
 
 			/* SVS+ */
-			qcom,gpu-pwrlevel@4 {
-				reg = <4>;
+			qcom,gpu-pwrlevel@6 {
+				reg = <6>;
 				qcom,gpu-freq = <300000000>;
 				qcom,bus-freq = <5>;
 				qcom,bus-min = <4>;
@@ -632,8 +658,8 @@
 			};
 
 			/* SVS */
-			qcom,gpu-pwrlevel@5 {
-				reg = <5>;
+			qcom,gpu-pwrlevel@7 {
+				reg = <7>;
 				qcom,gpu-freq = <216000000>;
 				qcom,bus-freq = <3>;
 				qcom,bus-min = <1>;
@@ -641,8 +667,8 @@
 			};
 
 			/* XO */
-			qcom,gpu-pwrlevel@6 {
-				reg = <6>;
+			qcom,gpu-pwrlevel@8 {
+				reg = <8>;
 				qcom,gpu-freq = <19200000>;
 				qcom,bus-freq = <0>;
 				qcom,bus-min = <0>;
