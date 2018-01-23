@@ -572,13 +572,7 @@
 	/delete-node/qcom,gpu-pwrlevel-bins;
 	/delete-node/qcom,gpu-pwrlevels;
 
-		//Special features:
-		qcom,tsens-name = "tsens_tz_sensor10"; //enable sensor name for GPU temperature monitoring 
-		qcom,soft-start-enable = <0x1>; //enable soft start to start without current peaks that can damage device
-		qcom,hpm-enable = <0x1>; //enable high power mode
-		qcom,boost-current-limit = <14>; //3200mA maximum
-		com,ocp-enable = <1>; //enables over current protection
-		qcom,l2pc-cpu-mask = <0x000000F0>; // Avoid L2PC on big cluster CPUs (CPU 4,5,6,7)
+
 
 		qcom,gpu-pwrlevel-bins {
 		#address-cells = <1>;
