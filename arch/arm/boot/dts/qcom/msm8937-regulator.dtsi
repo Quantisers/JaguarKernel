@@ -362,7 +362,7 @@
 
 		qcom,cpr-fuse-corners = <3>;
 		qcom,cpr-voltage-ceiling = <1155000 1225000 1350000>;
-		qcom,cpr-voltage-floor =   <1150000 1150000 1250000>;
+		qcom,cpr-voltage-floor =   <1050000 1150000 1275000>;
 		vdd-apc-supply = <&pm8937_s5>;
 
 		mem-acc-supply = <&mem_acc_vreg_corner>;
