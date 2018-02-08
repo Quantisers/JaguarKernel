@@ -156,13 +156,13 @@ static int msm_cpufreq_init(struct cpufreq_policy *policy)
 	if (cpufreq_frequency_table_cpuinfo(policy, table))
 	{
 		// AP: set default frequencies to prevent overclocking or underclocking during start
-		if (policy->cpu <= 1)
+		if (policy->cpu <= 3)
 		{
 		   policy->cpuinfo.min_freq = CONFIG_CPU_FREQ_MIN_CLUSTER1;
 		   policy->cpuinfo.max_freq = CONFIG_CPU_FREQ_MAX_CLUSTER1;
 		}
 
-		if (policy->cpu >= 2)
+		if (policy->cpu >= 4)
 		{
 		   policy->cpuinfo.min_freq = CONFIG_CPU_FREQ_MIN_CLUSTER2;
 		   policy->cpuinfo.max_freq = CONFIG_CPU_FREQ_MAX_CLUSTER2;
@@ -172,13 +172,13 @@ static int msm_cpufreq_init(struct cpufreq_policy *policy)
 	}
 
 	// AP: set default frequencies to prevent overclocking or underclocking during start
-	if (policy->cpu <= 1)
+	if (policy->cpu <= 3)
 	{
        policy->min = CONFIG_CPU_FREQ_MIN_CLUSTER1;
        policy->max = CONFIG_CPU_FREQ_MAX_CLUSTER1;
 	}
 
-	if (policy->cpu >= 2)
+	if (policy->cpu >= 4)
 	{
        policy->min = CONFIG_CPU_FREQ_MIN_CLUSTER2;
        policy->max = CONFIG_CPU_FREQ_MAX_CLUSTER2;
