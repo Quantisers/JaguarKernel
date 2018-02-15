@@ -47,7 +47,7 @@
 #define QUAT_MI2S_ID	(1 << 3)
 #define QUIN_MI2S_ID	(1 << 4)
 
-#define DEFAULT_MCLK_RATE 9600000
+#define DEFAULT_MCLK_RATE 12288000
 
 #define AW8738_MODE 5
 
