@@ -374,10 +374,10 @@ static int __init doubletap2wake_init(void)
 		goto err_input_dev;
 	}
 
-	dt2w_input_wq = create_workqueue("dt2wiwq");
+	dt2w_input_wq = alloc_workqueue("dt2wiwq", WQ_HIGHPRI | WQ_UNBOUND, 0);
 	if (!dt2w_input_wq) {
 		pr_err("%s: Failed to create dt2wiwq workqueue\n", __func__);
-		return -EFAULT;
+		return -ENOMEM;
 	}
 	INIT_WORK(&dt2w_input_work, dt2w_input_callback);
 	rc = input_register_handler(&dt2w_input_handler);
