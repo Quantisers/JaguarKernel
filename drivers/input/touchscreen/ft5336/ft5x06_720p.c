@@ -755,9 +755,13 @@ static int fb_notifier_callback(struct notifier_block *self,
 	if (evdata && evdata->data && event == FB_EVENT_BLANK &&
 			ft5x06_data && ft5x06_data->client) {
 		blank = evdata->data;
+<<<<<<< HEAD
 		if (*blank == FB_BLANK_UNBLANK
 				|| *blank == FB_BLANK_NORMAL
 				|| *blank == FB_BLANK_VSYNC_SUSPEND)
+=======
+		if (*blank == FB_BLANK_UNBLANK)
+>>>>>>> af5788f... drivers: input: Import Xiaomi ft5336 touchscreen & gen_vkeys drivers
 				schedule_work(&ft5x06_data->fb_notify_work);
 		else if (*blank == FB_BLANK_POWERDOWN) {
 			flush_work(&ft5x06_data->fb_notify_work);

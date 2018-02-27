@@ -1,5 +1,9 @@
 
 config TOUCHSCREEN_FT5336
+<<<<<<< HEAD
 	bool "FOCALTECH FT5336 touchpanel driver"
+=======
+	tristate "FOCALTECH FT5336 touchpanel driver"
+>>>>>>> af5788f... drivers: input: Import Xiaomi ft5336 touchscreen & gen_vkeys drivers
 	depends on CONFIG_INPUT_TOUCHSCREEN
 	default n
