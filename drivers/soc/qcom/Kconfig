@@ -910,6 +910,12 @@ config WCD_DSP_GLINK
 	   between MSM and WCD DSP over glink transport protocol. This driver
 	   provides read and write interface via char device.
 
+config CPU_VOLTAGE_CONTROL
+	bool "CPU Voltage Control"
+	default y
+	help
+	  This enables CPU Voltage Control.
+
 source "drivers/soc/qcom/memshare/Kconfig"
 
 endif # ARCH_MSM
