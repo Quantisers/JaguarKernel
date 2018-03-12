@@ -2,6 +2,7 @@
  *  linux/mm/vmscan.c
  *
  *  Copyright (C) 1991, 1992, 1993, 1994  Linus Torvalds
+ *  Copyright (C) 2017 XiaoMi, Inc.
  *
  *  Swap reorganised 29.12.95, Stephen Tweedie.
  *  kswapd added: 7.1.96  sct
@@ -3363,6 +3364,10 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int order, int classzone_idx)
 	finish_wait(&pgdat->kswapd_wait, &wait);
 }
 
+#if defined(CONFIG_ANDROID_WHETSTONE)
+extern void wakeup_kmemsw_chkd(void);
+#endif
+
 /*
  * The background pageout daemon, started as a kernel thread
  * from the init process.
@@ -3462,6 +3467,9 @@ static int kswapd(void *p)
 			balanced_classzone_idx = classzone_idx;
 			balanced_order = balance_pgdat(pgdat, order,
 						&balanced_classzone_idx);
+#if defined(CONFIG_ANDROID_WHETSTONE)
+			wakeup_kmemsw_chkd();
+#endif
 		}
 	}
 
