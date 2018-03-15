@@ -63,10 +63,6 @@ static struct mutex gov_lock;
 #define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
 #define DEFAULT_TIMER_RATE_SUSP ((unsigned long)(50 * USEC_PER_MSEC))
 
-#define FREQ_RESPONSIVENESS		 768000
-#define FREQ_RESPONSIVENESS_MAX		1094400
-#define FREQ_RESPONSIVENESS_MAX_BIGC	1401000
-
 #define CPUS_DOWN_RATE				1
 #define CPUS_UP_RATE				1
 
@@ -985,11 +981,8 @@ static struct cpufreq_alucard_tunables *alloc_tunable(
 	tunables->timer_rate = DEFAULT_TIMER_RATE;
 	tunables->timer_rate_prev = DEFAULT_TIMER_RATE;
 	tunables->timer_slack_val = DEFAULT_TIMER_SLACK;
-	tunables->freq_responsiveness = FREQ_RESPONSIVENESS;
-	if (policy->cpu < 2)
-		tunables->freq_responsiveness_max = FREQ_RESPONSIVENESS_MAX;
-	else
-		tunables->freq_responsiveness_max = FREQ_RESPONSIVENESS_MAX_BIGC;
+	tunables->freq_responsiveness = policy->min;
+	tunables->freq_responsiveness_max = policy->max;
 	tunables->cpus_up_rate_at_max_freq = CPUS_UP_RATE;
 	tunables->cpus_up_rate = CPUS_UP_RATE;
 	tunables->cpus_down_rate_at_max_freq = CPUS_DOWN_RATE;
