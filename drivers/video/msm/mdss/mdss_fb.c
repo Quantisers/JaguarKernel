@@ -5132,3 +5132,4 @@ void mdss_fb_calc_fps(struct msm_fb_data_type *mfd)
 		mfd->fps_info.frame_count = 0;
 	}
 }
+
