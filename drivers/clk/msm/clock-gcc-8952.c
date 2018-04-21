@@ -4239,7 +4239,7 @@ static void override_for_8937(int speed_bin)
 
 	if (speed_bin) {
 		OVERRIDE_FMAX6(gfx3d,
-			LOWER, 216000000, LOW, 300000000,
+			LOWER, 100000000, LOW, 300000000,
 			NOMINAL, 375000000, NOM_PLUS, 400000000,
 			HIGH, 450000000, SUPER_TUR, 600000000);
 		OVERRIDE_FTABLE(gfx3d, ftbl_gcc_oxili_gfx3d_clk, 8937_475MHz);
