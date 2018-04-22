@@ -644,7 +644,7 @@
 				reg = <6>;
 				qcom,gpu-freq = <216000000>;
 				qcom,bus-freq = <3>;
-				qcom,bus-min = <1>;
+				qcom,bus-min = <2>;
 				qcom,bus-max = <5>;
 			};
 
@@ -653,7 +653,7 @@
 				qcom,gpu-freq = <192000000>;
 				qcom,bus-freq = <3>;
 				qcom,bus-min = <1>;
-				qcom,bus-min = <4>;
+				qcom,bus-max = <4>;
 			};
 
 			 qcom,gpu-pwrlevel@8 {
@@ -667,7 +667,7 @@
 			qcom,gpu-pwrlevel@9 {
 				reg = <9>;
 				qcom,gpu-freq = <100000000>;
-				qcom,bus-freq = <3>;
+				qcom,bus-freq = <2>;
 				qcom,bus-min = <1>;
 				qcom,bus-max = <3>;
 			};
