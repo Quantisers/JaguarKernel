@@ -129,6 +129,15 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	  'interactive' governor for latency-sensitive workloads.
 
 
+config CPU_FREQ_DEFAULT_GOV_NEBULA
+	bool "nebula"
+	select CPU_FREQ_GOV_NEBULA
+	help
+	  Use the CPUFreq governor 'nebula' as default. This allows
+	  you to get a full dynamic cpu frequency capable system by simply
+	  loading your cpufreq low-level hardware driver, using the
+	  'nebula' governor for latency-sensitive workloads.
+
 config CPU_FREQ_DEFAULT_GOV_NIGHTMARE
 	bool "nightmare"
 	select CPU_FREQ_GOV_NIGHTMARE

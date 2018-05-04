@@ -36,6 +36,18 @@ arm64-obj-$(CONFIG_ARM64_CPU_SUSPEND)	+= sleep.o suspend.o
 arm64-obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
 arm64-obj-$(CONFIG_ASMP)		+= autosmp.o
 arm64-obj-$(CONFIG_AIO_HOTPLUG)		+= AiO_HotPlug.o
+<<<<<<< HEAD
+=======
+arm64-obj-$(CONFIG_MAKO_HOTPLUG)      	+= mako_hotplug.o
+arm64-obj-$(CONFIG_ALUCARD_HOTPLUG) += alucard_hotplug.o
+arm64-obj-$(CONFIG_THUNDERPLUG_CONTROL) += thunderplug.o
+arm64-obj-$(CONFIG_INTELLI_HOTPLUG) += intelli_hotplug.o
+arm64-obj-$(CONFIG_LAZY_HOTPLUG) += lazyplug.o
+arm64-obj-$(CONFIG_BLU_HOTPLUG) += blu_plug.o
+arm64-obj-$(CONFIG_BRICKED_HOTPLUG) += bricked_hotplug.o
+arm64-obj-$(CONFIG_ZEN_DECISION) += zen_decision.o
+arm64-obj-$(CONFIG_HIMA_HOTPLUG) += hima_hotplug.o
+>>>>>>> db4ec22... Added Hotplugs and TCP algorithms...
 arm64-obj-$(CONFIG_JUMP_LABEL)		+= jump_label.o
 arm64-obj-$(CONFIG_KGDB)		+= kgdb.o
 arm64-obj-$(CONFIG_EFI)			+= efi.o efi-stub.o efi-entry.o

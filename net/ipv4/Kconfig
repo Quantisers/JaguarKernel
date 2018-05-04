@@ -726,13 +726,10 @@ config DEFAULT_TCP_CONG
 	default "veno" if DEFAULT_VENO
 	default "reno" if DEFAULT_RENO
 	default "dctcp" if DEFAULT_DCTCP
-<<<<<<< HEAD
-=======
 	default "cdg" if DEFAULT_CDG
 	default "china" if DEFAULT_CHINA
 	default "agilesd" if DEFAULT_AGILESD
 	default "sociopath" if DEFAULT_SOCIOPATH
->>>>>>> 822c51a... Agile-SD : TCP congestion controller
 	default "cubic"
 
 config TCP_MD5SIG
