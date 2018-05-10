@@ -15,6 +15,8 @@ obj-$(CONFIG_DEBUG_FS)		+= clock-debug.o
 # MDM9607
 obj-$(CONFIG_ARCH_MDM9607)	+= clock-a7.o
 obj-$(CONFIG_ARCH_MDM9607)	+= clock-gcc-mdm9607.o
+CFLAGS_clock-gcc-8996.o		+= $(call cc-disable-warning,literal-conversion)
+CFLAGS_clock-mmss-8996.o	+= $(call cc-disable-warning,literal-conversion)
 
 # MDM9640
 obj-$(CONFIG_ARCH_MDM9640)	+= clock-a7.o
