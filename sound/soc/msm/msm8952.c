@@ -1787,7 +1787,7 @@ static void Set_Spk_PA_Id(void)
 {
 	int ret = 0;
 
-	ret = strncmp(Spk_Pa_Flag, "S88537A12", 9);
+	ret = strncmp(Spk_Pa_Flag, "12", 2);
 	if (ret == 0)  {
 		Spk_Pa_Id = A12_AW8738_SPK_PA;
 	} else {
