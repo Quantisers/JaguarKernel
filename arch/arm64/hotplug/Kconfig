@@ -8,4 +8,10 @@ config ALUCARD_CONTROL
 	depends on CUSTOM_HOTPLUG
 	help
 	  Known for being battery friendly. Developed by Alucard_24@XDA
+config THUNDERPLUG_CONTROL
+	bool "Thunderplug"
+	depends on CUSTOM_HOTPLUG
+	help
+	  This driver hotplugs cpu cores based on per-core load
+
 endmenu
