@@ -249,7 +249,6 @@ static const char * const qpnp_pon_reason[] = {
 	[7] = "Triggered from KPD (power key press)",
 };
 
-static struct qpnp_pon *fake_power_pon = NULL;
 #define POFF_REASON_FAULT_OFFSET	16
 #define POFF_REASON_S3_RESET_OFFSET	32
 static const char * const qpnp_poff_reason[] = {
@@ -880,18 +879,6 @@ static irqreturn_t qpnp_kpdpwr_irq(int irq, void *_pon)
 		dev_err(&pon->spmi->dev, "Unable to send input event\n");
 
 	return IRQ_HANDLED;
-}
-
-void qpnp_kpdpwr_simulate(void)
-{
-	int rc;
-
-	if (fake_power_pon == NULL)
-		return;
-
-	rc = qpnp_pon_input_dispatch(fake_power_pon, PON_KPDPWR);
-	if (rc)
-		printk(KERN_WARNING "fake_power_pon Unable to send input event\n");
 }
 
 static irqreturn_t qpnp_kpdpwr_bark_irq(int irq, void *_pon)
@@ -1627,7 +1614,6 @@ static int qpnp_pon_config_init(struct qpnp_pon *pon)
 		}
 
 		rc = qpnp_pon_request_irqs(pon, cfg);
-		fake_power_pon = pon;		
 		if (rc) {
 			dev_err(&pon->spmi->dev, "Unable to request-irq's\n");
 			goto unreg_input_dev;
