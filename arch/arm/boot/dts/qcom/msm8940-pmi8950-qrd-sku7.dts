@@ -40,7 +40,13 @@
 	qcom,battery-data = <&qrd_batterydata>;
 	qcom,float-voltage-mv = <4400>;
 	qcom,chg-inhibit-fg;
-	qcom,thermal-mitigation = <2000 1500 1200 700 0>;
+	qcom,autoadjust-vfloat;
+	qcom,jeita-temp-hard-limit = <1>;
+	qcom,use-parallel-aicl;
+	qcom,rparasitic-uohm = <100000>;
+	qcom,force-aicl-rerun;
+	qcom,aicl-rerun-period-s = <180>;
+	qcom,thermal-mitigation = <2100 1800 1500 900 0>; //Set these values for faster charging at higher temps
 	status = "okay";
 	qcom,vchg_sns-vadc = <&pmi8950_vadc>;
 	qcom,vchg-adc-channel-id = <3>;
@@ -50,8 +56,8 @@
 	qcom,battery-data = <&qrd_batterydata>;
 	qcom,cold-bat-decidegc = <(0)>;
 	qcom,cool-bat-decidegc = <(150)>;
-	qcom,warm-bat-decidegc = <450>;
-	qcom,warm-bat-india-decidegc = <500>;
+	qcom,warm-bat-decidegc = <500>; //Incrase warm temp, lipo supports up to 60ºC
+	qcom,warm-bat-india-decidegc = <520>;
 	qcom,fg-iterm-ma = <180>;
 	qcom,fg-chg-iterm-ma = <130>;
 	qcom,resume-soc = <99>;
@@ -62,6 +68,12 @@
 	qcom,cl-max-increment-deciperc = <1>;
 	qcom,cl-max-decrement-deciperc = <1>;
 	qcom,fg-delta-soc = <1>;
+	qcom,capacity-estimation-on;
+	qcom,esr-pulse-tuning-en;
+	qcom,hold-soc-while-full;
+	qcom,cycle-counter-en;
+	qcom,capacity-learning-on;
+	qcom,capacity-learning-feedback;
 	qcom,warm-bat-decidegc = <550>;
 	qcom,bad-battery-detection-enable;
 	qcom,hold-soc-while-full;
