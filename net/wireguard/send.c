@@ -10,6 +10,7 @@
 #include "socket.h"
 #include "messages.h"
 #include "cookie.h"
+#include "crypto/simd.h"
 
 #include <linux/uio.h>
 #include <linux/inetdevice.h>
@@ -36,6 +37,7 @@ static void packet_send_handshake_initiation(struct wireguard_peer *peer)
 	if (noise_handshake_create_initiation(&packet, &peer->handshake)) {
 		cookie_add_mac_to_packet(&packet, sizeof(packet), peer);
 		timers_any_authenticated_packet_traversal(peer);
+		timers_any_authenticated_packet_sent(peer);
 		socket_send_buffer_to_peer(peer, &packet, sizeof(struct message_handshake_initiation), HANDSHAKE_DSCP);
 		timers_handshake_initiated(peer);
 	}
@@ -78,6 +80,7 @@ void packet_send_handshake_response(struct wireguard_peer *peer)
 		if (noise_handshake_begin_session(&peer->handshake, &peer->keypairs)) {
 			timers_session_derived(peer);
 			timers_any_authenticated_packet_traversal(peer);
+			timers_any_authenticated_packet_sent(peer);
 			socket_send_buffer_to_peer(peer, &packet, sizeof(struct message_handshake_response), HANDSHAKE_DSCP);
 		}
 	}
@@ -200,6 +203,7 @@ static void packet_create_data_done(struct sk_buff *first, struct wireguard_peer
 	bool is_keepalive, data_sent = false;
 
 	timers_any_authenticated_packet_traversal(peer);
+	timers_any_authenticated_packet_sent(peer);
 	skb_walk_null_queue_safe(first, skb, next) {
 		is_keepalive = skb->len == message_data_len(0);
 		if (likely(!socket_send_skb_to_peer(peer, skb, PACKET_CB(skb)->ds) && !is_keepalive))
@@ -220,7 +224,6 @@ void packet_tx_worker(struct work_struct *work)
 	struct sk_buff *first;
 	enum packet_state state;
 
-	spin_lock_bh(&queue->ring.consumer_lock);
 	while ((first = __ptr_ring_peek(&queue->ring)) != NULL && (state = atomic_read(&PACKET_CB(first)->state)) != PACKET_STATE_UNCRYPTED) {
 		__ptr_ring_discard_one(&queue->ring);
 		peer = PACKET_PEER(first);
@@ -234,14 +237,13 @@ void packet_tx_worker(struct work_struct *work)
 		noise_keypair_put(keypair);
 		peer_put(peer);
 	}
-	spin_unlock_bh(&queue->ring.consumer_lock);
 }
 
 void packet_encrypt_worker(struct work_struct *work)
 {
 	struct crypt_queue *queue = container_of(work, struct multicore_worker, work)->ptr;
 	struct sk_buff *first, *skb, *next;
-	bool have_simd = chacha20poly1305_init_simd();
+	bool have_simd = simd_get();
 
 	while ((first = ptr_ring_consume_bh(&queue->ring)) != NULL) {
 		enum packet_state state = PACKET_STATE_CRYPTED;
@@ -255,8 +257,10 @@ void packet_encrypt_worker(struct work_struct *work)
 			}
 		}
 		queue_enqueue_per_peer(&PACKET_PEER(first)->tx_queue, first, state);
+
+		have_simd = simd_relax(have_simd);
 	}
-	chacha20poly1305_deinit_simd(have_simd);
+	simd_put(have_simd);
 }
 
 static void packet_create_data(struct sk_buff *first)
