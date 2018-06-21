@@ -41,6 +41,7 @@ Module.symvers
 # Top-level generic files
 #
 /tags
+/out
 /TAGS
 /linux
 /vmlinux
