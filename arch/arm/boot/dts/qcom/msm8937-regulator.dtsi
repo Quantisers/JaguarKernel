@@ -73,9 +73,9 @@
 	rpm-regulator-smpa4 {
 		status = "okay";
 		pm8937_s4: regulator-s4 {
-			regulator-min-microvolt = <2050000>;
-			regulator-max-microvolt = <2050000>;
-			qcom,init-voltage = <2050000>;
+			regulator-min-microvolt = <2350000>;
+			regulator-max-microvolt = <2350000>;
+			qcom,init-voltage = <2350000>;
 			status = "okay";
 		};
 	};
