@@ -70,6 +70,17 @@ static void do_partner_resume_event(struct work_struct *work);
 
 static struct workqueue_struct *workqueue;
 
+static struct devfreq *tz_devfreq_g;
+static struct work_struct boost_work;
+static struct delayed_work unboost_work;
+static bool gpu_boost_running;
+
+static unsigned long boost_freq = 520000000;
+module_param(boost_freq, ulong, 0644);
+
+static unsigned long boost_duration = 10;
+module_param(boost_duration, ulong, 0644);
+
 /*
  * Returns GPU suspend time in millisecond.
  */
