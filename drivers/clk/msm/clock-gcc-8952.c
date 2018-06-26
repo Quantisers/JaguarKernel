@@ -145,8 +145,8 @@ static DEFINE_VDD_REGULATORS(vdd_hf_pll, VDD_HF_PLL_NUM, 2,
 				vdd_hf_levels, NULL);
 
 static struct pll_freq_tbl apcs_cci_pll_freq[] = {
-	F_APCS_PLL(307200000, 16, 0x0, 0x1, 0x0, 0x0, 0x0),
-	F_APCS_PLL(600000000, 31, 0x1, 0x4, 0x0, 0x0, 0x0),
+	F_APCS_PLL(460800000, 24, 0x0, 0x1, 0x0, 0x0, 0x0), //Higher minimum speed
+	F_APCS_PLL(710400000, 37, 0x1, 0x4, 0x0, 0x0, 0x0), //DSP Clock incrased in 15%
 };
 
 static struct pll_clk a53ss_cci_pll = {
@@ -200,6 +200,7 @@ static struct pll_freq_tbl apcs_c0_pll_freq[] = {
 	F_APCS_PLL( 998400000,  52, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1094400000,  57, 0x0, 0x1, 0x0, 0x0, 0x0),
 	F_APCS_PLL(1209600000,  63, 0x0, 0x1, 0x0, 0x0, 0x0),
+	F_APCS_PLL(1344000000,  70, 0x0, 0x1, 0x0, 0x0, 0x0),
 };
 
 static struct pll_clk a53ss_c0_pll = {
