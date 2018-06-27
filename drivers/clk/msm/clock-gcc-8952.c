@@ -145,7 +145,7 @@ static DEFINE_VDD_REGULATORS(vdd_hf_pll, VDD_HF_PLL_NUM, 2,
 				vdd_hf_levels, NULL);
 
 static struct pll_freq_tbl apcs_cci_pll_freq[] = {
-	F_APCS_PLL(460800000, 24, 0x0, 0x1, 0x0, 0x0, 0x0), //Higher minimum speed
+	F_APCS_PLL(518400000, 27, 0x0, 0x1, 0x0, 0x0, 0x0), //Higher minimum speed
 	F_APCS_PLL(710400000, 37, 0x1, 0x4, 0x0, 0x0, 0x0), //DSP Clock incrased in 15%
 };
 
@@ -407,7 +407,7 @@ static struct pll_vote_clk gpll6_clk_src = {
 	.base = &virt_bases[GCC_BASE],
 	.c = {
 		.parent = &xo_clk_src.c,
-		.rate = 1080000000,
+		.rate = 1220000000,
 		.dbg_name = "gpll6_clk_src",
 		.ops = &clk_ops_pll_vote,
 		CLK_INIT(gpll6_clk_src.c),
@@ -605,6 +605,8 @@ static struct clk_freq_tbl ftbl_gcc_venus0_vcodec0_clk_8937[] = {
 	F( 308570000,          gpll6,  3.5,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
 	F( 360000000,          gpll6,    3,    0,     0),
+	F( 360000000,          gpll6,    3,    0,     0),
+	F( 400000000,          gpll6,    3,    0,     0), //Venus overclocking
 	F_END
 };
 
@@ -4213,7 +4215,7 @@ static void override_for_8917(int speed_bin)
 
 static void override_for_8937(int speed_bin)
 {
-	gpll3_clk_src.c.rate = 930000000;
+	gpll3_clk_src.c.rate = 1220000000; //GPLL3 set maximum rate
 	gpll3_clk_src.vco_tbl = p_vco_8937;
 	gpll3_clk_src.num_vco = ARRAY_SIZE(p_vco_8937);
 	OVERRIDE_FMAX2(gpll3, LOW, 850000000, NOMINAL, 1220000000);
@@ -4275,7 +4277,7 @@ static void override_for_8937(int speed_bin)
 	OVERRIDE_FTABLE(vcodec0, ftbl_gcc_venus0_vcodec0_clk, 8937);
 	OVERRIDE_FMAX5(vcodec0,
 		LOWER, 166150000, LOW, 240000000, NOMINAL, 308570000,
-		NOM_PLUS, 320000000, HIGH, 360000000);
+		NOM_PLUS, 360000000, HIGH, 400000000); //Venus overclock
 	OVERRIDE_FMAX2(sdcc1_apps, LOWER, 100000000,
 		NOMINAL, 400000000);
 }
