@@ -151,16 +151,16 @@
 				  "mbhc_int";
 
 		cdc-vdda-cp-supply = <&pm8937_s4>;
-		qcom,cdc-vdda-cp-voltage = <2350000 2350000>;
-		qcom,cdc-vdda-cp-current = <950000>;
+		qcom,cdc-vdda-cp-voltage = <2250000 2350000>;
+		qcom,cdc-vdda-cp-current = <900000>;
 
 		cdc-vdd-io-supply = <&pm8937_l5>;
 		qcom,cdc-vdd-io-voltage = <1800000 1800000>;
 		qcom,cdc-vdd-io-current = <30000>;
 
 		cdc-vdd-pa-supply = <&pm8937_s4>;
-		qcom,cdc-vdd-pa-voltage = <2350000 2350000>;
-		qcom,cdc-vdd-pa-current = <550000>;
+		qcom,cdc-vdd-pa-voltage = <2250000 2350000>;
+		qcom,cdc-vdd-pa-current = <500000>;
 
 		cdc-vdd-mic-bias-supply = <&pm8937_l13>;
 		qcom,cdc-vdd-mic-bias-voltage = <3075000 3075000>;

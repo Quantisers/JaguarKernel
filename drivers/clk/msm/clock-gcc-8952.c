@@ -146,7 +146,7 @@ static DEFINE_VDD_REGULATORS(vdd_hf_pll, VDD_HF_PLL_NUM, 2,
 
 static struct pll_freq_tbl apcs_cci_pll_freq[] = {
 	F_APCS_PLL(518400000, 27, 0x0, 0x1, 0x0, 0x0, 0x0), //Higher minimum speed
-	F_APCS_PLL(710400000, 37, 0x1, 0x4, 0x0, 0x0, 0x0), //DSP Clock incrased in 15%
+	F_APCS_PLL(672000000, 35, 0x1, 0x4, 0x0, 0x0, 0x0), //DSP Clock incrased in 15%
 };
 
 static struct pll_clk a53ss_cci_pll = {
