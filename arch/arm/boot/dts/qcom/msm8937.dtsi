@@ -22,7 +22,7 @@
 	interrupt-parent = <&intc>;
 
 	chosen {
-		bootargs = "sched_enable_hmp=1";
+		bootargs = "sched_enable_hmp=1 sched_enable_power_aware=1 sched_downmigrate=45 sched_upmigrate=72 sched_restrict_cluster_spill=0 sched_boost=1 kpti=1";
 	};
 
 	firmware: firmware {
