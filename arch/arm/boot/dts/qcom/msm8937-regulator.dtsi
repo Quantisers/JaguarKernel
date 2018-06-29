@@ -73,9 +73,9 @@
 	rpm-regulator-smpa4 {
 		status = "okay";
 		pm8937_s4: regulator-s4 {
-			regulator-min-microvolt = <2250000>;
-			regulator-max-microvolt = <2250000>;
-			qcom,init-voltage = <2250000>;
+			regulator-min-microvolt = <2050000>;
+			regulator-max-microvolt = <2050000>;
+			qcom,init-voltage = <2050000>;
 			status = "okay";
 		};
 	};
@@ -363,7 +363,7 @@
 
 		qcom,cpr-fuse-corners = <3>;
 		qcom,cpr-voltage-ceiling = <1130000 1225000 1350000>;
-		qcom,cpr-voltage-floor =   <1050000 1150000 1275000>; //overvolt higher clock rates.
+		qcom,cpr-voltage-floor =   <1050000 1150000 1265000>; //overvolt higher clock rates.
 		vdd-apc-supply = <&pm8937_s5>;
 
 		mem-acc-supply = <&mem_acc_vreg_corner>;
@@ -396,7 +396,7 @@
 					<70 54 10 0>;
 		qcom,cpr-fuse-quot-offset-scale = <5 5 5>;
 		qcom,cpr-init-voltage-step = <10000>;
-		qcom,cpr-corner-map = <1 1 2 2 2 3 3 3 3 3>;
+		qcom,cpr-corner-map = <1 1 2 2 2 2 3 3 3 3>;
 		qcom,cpr-corner-frequency-map =
 				<1 960000000>,
 				<2 1094400000>,
