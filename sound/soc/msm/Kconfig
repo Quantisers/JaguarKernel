@@ -49,7 +49,7 @@ config DOLBY_DS2
 	 the various posrt processing parameters
 
 config DTS_EAGLE
-	bool "Enable DTS Eagle Support"
+	tristate "Enable DTS Eagle Support"
 	depends on SND_SOC_MSM_QDSP6V2_INTF
 	select SND_HWDEP
 	help
