@@ -298,9 +298,9 @@
 			compatible = "qcom,spm-regulator";
 			reg = <0x2000 0x100>;
 			qcom,mode = "pwm";
-			qcom,ocp-enable = <0>;
-			qcom,auto-mode-enable = <0>;
-			qcom,hpm-enable = <1>;
+			qcom,ocp-enable = <0>; //disable over current protection
+			qcom,auto-mode-enable = <0>; //disable auto mode and set it to High Power Mode
+			qcom,hpm-enable = <1>; //enable high power mode
 			qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 			regulator-name = "pm8937_s5";
 			regulator-min-microvolt = <1025000>;
@@ -365,8 +365,8 @@
 		regulator-max-microvolt = <10>;
 
 		qcom,cpr-fuse-corners = <3>;
-		qcom,cpr-voltage-ceiling = <1125000 1225000 1345000>;
-		qcom,cpr-voltage-floor =   <1045000 1185000 1265000>; //overvolt higher clock rates.
+		qcom,cpr-voltage-ceiling = <1125000 1225000 1345000>; //RAM was undervolted at max clock in -5mV
+		qcom,cpr-voltage-floor =   <1045000 1190000 1275000>; //overvolt higher clock rates (+25mV). Stock one was undervolted (-60mV).
 		vdd-apc-supply = <&pm8937_s5>;
 
 		mem-acc-supply = <&mem_acc_vreg_corner>;
@@ -388,7 +388,7 @@
 		qcom,cpr-fuse-row = <67 0>;
 		qcom,cpr-fuse-target-quot = <42 24 6>;
 		qcom,cpr-fuse-ro-sel = <60 57 54>;
-		qcom,cpr-init-voltage-ref = <1125000 1225000 1345000>;
+		qcom,cpr-init-voltage-ref = <1125000 1225000 1345000>; //RAM was undervolted at max clock in -5mV
 		qcom,cpr-fuse-init-voltage =
 					<67 36 6 0>,
 					<67 18 6 0>,
