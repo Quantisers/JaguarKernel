@@ -1115,6 +1115,8 @@ config ARM64_ERRATUM_843419
 
 endmenu
 
+source "arch/arm64/hotplug/Kconfig"
+
 source "net/Kconfig"
 
 source "drivers/Kconfig"
