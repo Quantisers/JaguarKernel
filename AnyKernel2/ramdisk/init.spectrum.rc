@@ -10,11 +10,11 @@ on property:sys.boot_completed=1
    # Enable Spectrum support
    setprop spectrum.support 1
    # Add kernel name
-   setprop persist.spectrum.kernel Gabriel
+   setprop persist.spectrum.kernel YelloJaguar
 
 # Balance (default profile)
 on property:persist.spectrum.profile=0
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor alucard
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 39000
@@ -28,7 +28,7 @@ on property:persist.spectrum.profile=0
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 80000
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
 
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor alucard
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:39000
@@ -68,9 +68,11 @@ on property:persist.spectrum.profile=0
 	write /proc/sys/vm/dirty_expire_centisecs 200
 	write /proc/sys/vm/dirty_writeback_centisecs 500
 
+	write /proc/sys/net/ipv4/tcp_congestion_control cubic
+
 # Performance
 on property:persist.spectrum.profile=1
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor ondemand
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
@@ -84,7 +86,7 @@ on property:persist.spectrum.profile=1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
 
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
@@ -107,7 +109,7 @@ on property:persist.spectrum.profile=1
 	write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 450000000
 	write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/device/kgsl/kgsl-3d0/default_pwrlevel 3
 
-    write /sys/block/mmcblk0/queue/scheduler fiops
+    write /sys/block/mmcblk0/queue/scheduler maple
     write /sys/module/workqueue/parameters/power_efficient 0
 	write /proc/sys/kernel/random/read_wakeup_threshold 1024
 	write /proc/sys/kernel/random/write_wakeup_threshold 128
@@ -124,9 +126,11 @@ on property:persist.spectrum.profile=1
 	write /proc/sys/vm/dirty_expire_centisecs 200
 	write /proc/sys/vm/dirty_writeback_centisecs 1500
 
+	write /proc/sys/net/ipv4/tcp_congestion_control westwood
+
 # Battery
 on property:persist.spectrum.profile=2
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor powersave
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
@@ -140,7 +144,7 @@ on property:persist.spectrum.profile=2
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
 
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
@@ -180,9 +184,11 @@ on property:persist.spectrum.profile=2
 	write /proc/sys/vm/dirty_expire_centisecs 250
 	write /proc/sys/vm/dirty_writeback_centisecs 500
 
+	write /proc/sys/net/ipv4/tcp_congestion_control westwood
+
 # Gaming
 on property:persist.spectrum.profile=3
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor nebula
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
@@ -196,7 +202,7 @@ on property:persist.spectrum.profile=3
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
 
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor nebula
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
 	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
@@ -235,3 +241,5 @@ on property:persist.spectrum.profile=3
 	write /proc/sys/vm/dirty_background_ratio 10
 	write /proc/sys/vm/dirty_expire_centisecs 500
 	write /proc/sys/vm/dirty_writeback_centisecs 100
+
+	write /proc/sys/net/ipv4/tcp_congestion_control westwood
