@@ -62,7 +62,7 @@ static void __ref AiO_HotPlug_work(struct work_struct *work)
          unsigned int max_big_core = AiO.big_cores;
 
 #ifdef CONFIG_THERMAL_MONITOR
-         if (mitigation_thermal_core_control) {
+         if (mitigation_thermal_core_control()) {
              if (max_big_core > 2)
                  max_big_core = 2;
          }
