@@ -619,42 +619,6 @@ config TCP_CONG_DCTCP
 	For further details see:
 	  http://simula.stanford.edu/~alizade/Site/DCTCP_files/dctcp-final.pdf
 
-config TCP_CONG_CDG
-	tristate "CAIA Delay-Gradient (CDG)"
-	default n
-	---help---
-	CAIA Delay-Gradient (CDG) is a TCP congestion control that modifies
-	the TCP sender in order to:
-
-	  o Use the delay gradient as a congestion signal.
-	  o Back off with an average probability that is independent of the RTT.
-	  o Coexist with flows that use loss-based congestion control.
-	  o Tolerate packet loss unrelated to congestion.
-
-	For further details see:
-	  D.A. Hayes and G. Armitage. "Revisiting TCP congestion control using
-	  delay gradients." In Networking 2011. Preprint: http://goo.gl/No3vdg
-
-config TCP_CONG_SOCIOPATH
-        tristate "TCP Sociopath"
-        default n
-        ---help---
-        This is basically TCP Reno with no slow start and a much more
-        aggressive ssthresh recalculation (lowers it by 5% instead of 50%).
-        Use responsibly!
-
-config TCP_CONG_AGILESD
-        tristate "Agile-SD Congestion control"
-        default n
-        ---help---
-        
-        This is version 1.0 of Agile-SD TCP. It is a sender-side only. 
-        It contributes the Agility Factor (AF) to shorten the epoch time 
-        and to make TCP independent from RTT. AF reduces the sensitivity 
-        to packet losses, which in turn Agile-SD to achieve better throughput 
-        over high-speed networks.
-
-
 choice
 	prompt "Default TCP congestion control"
 	default DEFAULT_CUBIC
@@ -686,15 +650,6 @@ choice
 	config DEFAULT_DCTCP
 		bool "DCTCP" if TCP_CONG_DCTCP=y
 
-<<<<<<< HEAD
-=======
-        config DEFAULT_AGILESD
-		bool "AGILESD" if TCP_CONG_AGILESD=y
-
-	config DEFAULT_CDG
-		bool "CDG" if TCP_CONG_CDG=y
-
->>>>>>> 822c51a... Agile-SD : TCP congestion controller
 	config DEFAULT_RENO
 		bool "Reno"
 endchoice
@@ -717,9 +672,6 @@ config DEFAULT_TCP_CONG
 	default "veno" if DEFAULT_VENO
 	default "reno" if DEFAULT_RENO
 	default "dctcp" if DEFAULT_DCTCP
-	default "cdg" if DEFAULT_CDG
-	default "agilesd" if DEFAULT_AGILESD
-	default "sociopath" if DEFAULT_SOCIOPATH
 	default "cubic"
 
 config TCP_MD5SIG
