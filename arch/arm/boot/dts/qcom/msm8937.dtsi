@@ -465,21 +465,12 @@
 		qcom,bcl-hotplug-list = <&CPU1 &CPU2 &CPU5 &CPU6>; //Disables 2 BIG and 2 LITTLE
 		qcom,bcl-soc-hotplug-list = <&CPU0 &CPU1 &CPU2 &CPU3>; //Disables All BIG cores
 		qcom,ibat-monitor {
-<<<<<<< HEAD
-			qcom,low-threshold-uamp = <3400000>;
-			qcom,high-threshold-uamp = <4200000>;
-			qcom,mitigation-freq-khz = <998400>;
-			qcom,vph-high-threshold-uv = <3500000>;
-			qcom,vph-low-threshold-uv = <3200000>;
-			qcom,soc-low-threshold = <10>;
-=======
 			qcom,low-threshold-uamp = <950000>; //Minimum treshold.
 			qcom,high-threshold-uamp = <1100000>; //Maximum limit allowed to be drawed from battery.
 			qcom,mitigation-freq-khz = <1094400>;
 			qcom,vph-high-threshold-uv = <3700000>;
 			qcom,vph-low-threshold-uv = <3500000>;
 			qcom,soc-low-threshold = <5>;
->>>>>>> b1e6462910cd... Battery: Improve charging
 			qcom,thermal-handle = <&msm_thermal_freq>;
 		};
 	};
