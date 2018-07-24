@@ -1,4 +1,8 @@
-        Linux kernel release 3.x <http://kernel.org/>
+     # JagurarKernelCI (Semaphoreci)
+[![Build Status](https://semaphoreci.com/api/v1/infinity-plus/jagurarkernelci/branches/master/badge.svg)](https://semaphoreci.com/infinity-plus/jagurarkernelci)
+
+     
+     Linux kernel release 3.x <http://kernel.org/>
 
 These are the release notes for Linux version 3.  Read them carefully,
 as they tell you what this is all about, explain how to install the
