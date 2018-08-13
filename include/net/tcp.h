@@ -378,23 +378,29 @@ void tcp_rcv_space_adjust(struct sock *sk);
 int tcp_twsk_unique(struct sock *sk, struct sock *sktw, void *twp);
 void tcp_twsk_destructor(struct sock *sk);
 ssize_t tcp_splice_read(struct socket *sk, loff_t *ppos,
-			struct pipe_inode_info *pipe, size_t len,
-			unsigned int flags);
+                        struct pipe_inode_info *pipe, size_t len,
+                        unsigned int flags);
+
+/* sysctl master controller */
+extern int tcp_use_userconfig_sysctl_handler(struct ctl_table *, int,
+                                void __user *, size_t *, loff_t *);
+extern int tcp_proc_delayed_ack_control(struct ctl_table *, int,
+                                void __user *, size_t *, loff_t *);
 
 void tcp_enter_quickack_mode(struct sock *sk);
 static inline void tcp_dec_quickack_mode(struct sock *sk,
-					 const unsigned int pkts)
+                                         const unsigned int pkts)
 {
-	struct inet_connection_sock *icsk = inet_csk(sk);
+        struct inet_connection_sock *icsk = inet_csk(sk);
 
-	if (icsk->icsk_ack.quick) {
-		if (pkts >= icsk->icsk_ack.quick) {
-			icsk->icsk_ack.quick = 0;
-			/* Leaving quickack mode we deflate ATO. */
-			icsk->icsk_ack.ato   = TCP_ATO_MIN;
-		} else
-			icsk->icsk_ack.quick -= pkts;
-	}
+        if (icsk->icsk_ack.quick) {
+                if (pkts >= icsk->icsk_ack.quick) {
+                        icsk->icsk_ack.quick = 0;
+                        /* Leaving quickack mode we deflate ATO. */
+                        icsk->icsk_ack.ato   = TCP_ATO_MIN;
+                } else
+                        icsk->icsk_ack.quick -= pkts;
+        }
 }
 
 #define	TCP_ECN_OK		1
