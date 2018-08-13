@@ -223,13 +223,6 @@ static int snd_usb_create_streams(struct snd_usb_audio *chip, int ctrlif)
 	int i, protocol;
 	int rest_bytes;
 
-	usb_iface = usb_ifnum_to_if(dev, ctrlif);
-	if (!usb_iface) {
-		snd_printk(KERN_ERR "%d:%u : does not exist\n",
-					dev->devnum, ctrlif);
-		return -EINVAL;
-	}
-
 	/* find audiocontrol interface */
 	host_iface = &usb_iface->altsetting[0];
 	if (!host_iface) {
