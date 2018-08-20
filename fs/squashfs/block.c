@@ -428,31 +428,31 @@ static int read_data_block(struct squashfs_read_request *req, int length,
 static int __squashfs_read_data(struct super_block *sb, u64 index, int length,
     u64 *next_index, struct squashfs_page_actor *output, bool sync)
 {
-    struct squashfs_read_request *req;
+	struct squashfs_read_request *req;
 
-    req = kcalloc(1, sizeof(struct squashfs_read_request), GFP_KERNEL);
-    if (!req) {
-        if (!sync)
-            squashfs_page_actor_free(output, -ENOMEM);
-        return -ENOMEM;
-    }
+	req = kcalloc(1, sizeof(struct squashfs_read_request), GFP_KERNEL);
+	if (!req) {
+		if (!sync)
+			squashfs_page_actor_free(output, -ENOMEM);
+		return -ENOMEM;
+	}
 
-    req->sb = sb;
-    req->index = index;
-    req->output = output;
+	req->sb = sb;
+	req->index = index;
+	req->output = output;
 
-    if (next_index)
-        *next_index = index;
+	if (next_index)
+		*next_index = index;
 
-    if (length)
-        length = read_data_block(req, length, next_index, sync);
-    else
-        length = read_metadata_block(req, next_index);
+	if (length)
+		length = read_data_block(req, length, next_index, sync);
+	else
+		length = read_metadata_block(req, next_index);
 
-    if (length < 0) {
-        ERROR("squashfs_read_data failed to read block 0x%llx\n",
-              (unsigned long long)index);
-        return -EIO;
+	if (length < 0) {
+		ERROR("squashfs_read_data failed to read block 0x%llx\n",
+		      (unsigned long long)index);
+		return -EIO;
 	}
 
 	return length;
