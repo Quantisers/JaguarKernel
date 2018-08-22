@@ -3,8 +3,8 @@
 # osm0sis @ xda-developers
 
 OUTFD=/proc/self/fd/$2;
-ZIPFILE="$3";
-DIR=`dirname "$ZIPFILE"`;
+ZIP="$3";
+DIR=`dirname "$ZIP"`;
 
 ui_print() {
   until [ ! "$1" ]; do
@@ -13,73 +13,53 @@ ui_print() {
   done;
 }
 show_progress() { echo "progress $1 $2" > $OUTFD; }
-file_getprop() { grep "^$2=" "$1" | cut -d= -f2; }
-if [ ! "$(getprop 2>/dev/null)" ]; then
-  getprop() {
-    local propval="$(file_getprop /default.prop $1 2>/dev/null)";
-    test "$propval" || local propval="$(file_getprop $root/system/build.prop $1 2>/dev/null)";
-    test "$propval" && echo "$propval" || echo "";
-  }
-fi;
+set_perm_recursive() {
+  dirs=$(echo $* | $bb awk '{ print substr($0, index($0,$5)) }');
+  for i in $dirs; do
+    $bb chown -R $1:$2 $i;
+    find "$i" -type d -exec chmod $3 {} +;
+    find "$i" -type f -exec chmod $4 {} +;
+  done;
+}
+file_getprop() { grep "^$2" "$1" | cut -d= -f2; }
+getprop() { test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1; }
 cleanup() { rm -rf /tmp/anykernel; }
-debugging() {
-  case $(basename "$ZIPFILE" .zip) in
-    *-debugging)
-      ui_print " ";
-      ui_print "Creating debugging archive in zip directory...";
-      $bb tar -czvf "$DIR/anykernel2-$(date +%Y-%m-%d_%H%M%S)-debug.tgz" /tmp/*;
-    ;;
-  esac;
-}
-abort() {
-  ui_print "$*";
-  debugging;
-  if [ ! -f /tmp/anykernel/anykernel.sh -o "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanuponabort 2>/dev/null)" == 1 ]; then
-    cleanup;
-  fi;
-  umount /system;
-  umount /vendor 2>/dev/null;
-  umount /data 2>/dev/null;
-  exit 1;
-}
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanuponabort)" == 1 ]; then
+    abort() { ui_print "$*"; cleanup; umount /system; umount /data; exit 1; }
+  else
+    abort() { ui_print "$*"; umount /system; umount /data; exit 1; }
+fi;
 
 show_progress 1.34 4;
 ui_print " ";
 cleanup;
 mkdir -p /tmp/anykernel/bin;
 cd /tmp/anykernel;
-unzip -o "$ZIPFILE";
+unzip -o "$ZIP";
 if [ $? != 0 -o -z "$(ls /tmp/anykernel/tools)" ]; then
   abort "Unzip failed. Aborting...";
 fi;
+chmod -R 755 /tmp/anykernel/tools /tmp/anykernel/bin;
 bb=/tmp/anykernel/tools/busybox;
-chmod 755 $bb;
-$bb chmod -R 755 /tmp/anykernel/tools /tmp/anykernel/bin;
-
-if [ -f /tmp/anykernel/banner ]; then
-  while IFS='' read -r line || $bb [[ -n "$line" ]]; do
-    ui_print "$line";
-  done < /tmp/anykernel/banner;
-  ui_print " ";
-  ui_print " ";
-fi;
 
 ui_print "$(file_getprop /tmp/anykernel/anykernel.sh kernel.string)";
-if [ -f /tmp/anykernel/version ]; then
-  ui_print " ";
-  ui_print "$(cat /tmp/anykernel/version)";
-  ui_print " ";
-fi;
-ui_print " ";
-ui_print "AnyKernel2 by osm0sis @ xda-developers";
-ui_print " ";
-ui_print " ";
-
-umount /system 2>/dev/null;
-umount /vendor 2>/dev/null;
-mount -o ro -t auto /system;
-mount -o ro -t auto /vendor 2>/dev/null;
-mount /data 2>/dev/null;
+ui_print "    ___                     ";
+ui_print "   ( /                      ";
+ui_print "    / __,  _,  , , __,  _   ";
+ui_print "  _/_(_/(_(_)_(_/_(_/(_/ (_ ";
+ui_print " //        /|               ";
+ui_print "(/        (/                ";
+ui_print "";
+ui_print "";
+ui_print " __  ,______ _ __  _ __  ______  __  ";
+ui_print "( /,/(  /   ( /  )( /  )(  /    ( /  ";
+ui_print " /<    /--   /--<  /  /   /--    /   ";
+ui_print "/  \_(/____//   \_/  (_ (/____/(/___/";
+ui_print "";
+ui_print "";
+umount /system;
+mount -o rw -t auto /system;
+mount /data;
 test -f /system/system/build.prop && root=/system;
 
 if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.devicecheck)" == 1 ]; then
@@ -96,8 +76,22 @@ if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.devicecheck)" == 1 ]; then
     abort "Unsupported device. Aborting...";
   fi;
 fi;
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.initd)" == 1 ]; then
+  ui_print ".**************************************.";
+  mkdir /system/etc/init.d;
+  set_perm_recursive 0 0 0755 0755 /system/etc/init.d;
+fi;
 
-ui_print "Installing...";
+if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.system)" == 1 ]; then
+  ui_print ".+++++++++Releasing the YelloJaguar++++++++++.";
+  ui_print ".         #feelTheSpeed                             .";
+  ui_print "Kernel: YellowJaguar Non-Treble Kernel"
+  ui_print "By: infinitEplus |Team Quantum|"
+  cp -fr /tmp/anykernel/system/* /system/;
+  set_perm_recursive 0 0 0755 0755 /system/etc/init.d/Velocity;
+fi;
+
+ui_print "Installing kernel...";
 for i in $($bb --list); do
   $bb ln -s $bb /tmp/anykernel/bin/$i;
 done;
@@ -113,41 +107,16 @@ if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.modules)" == 1 ]; then
   ui_print " ";
   ui_print "Pushing modules...";
   mount -o rw,remount -t auto /system;
-  mount -o rw,remount -t auto /vendor 2>/dev/null;
-  cd /tmp/anykernel/modules;
-  for module in $(find . -name '*.ko'); do
-    case $module in
-      */system/*) modtarget=$root/$module;;
-      *) modtarget=/$module;;
-    esac;
-    if [ ! -e $modtarget ]; then
-      case $module in
-        */vendor/*) mod=vendor;;
-        *) mod=system;;
-      esac;
-    fi;
-    mkdir -p $(dirname $modtarget);
-    $bb cp -rLf $module $modtarget;
-    $bb chown 0:0 $modtarget;
-    $bb chmod 644 $modtarget;
-    if [ "$mod" ]; then
-      chcon "u:object_r:${mod}_file:s0" $modtarget;
-    fi;
-  done;
-  cd /tmp/anykernel;
+  cp -rf /tmp/anykernel/modules/* $root/system/lib/modules/;
+  set_perm_recursive 0 0 0755 0644 $root/system/lib/modules;
   mount -o ro,remount -t auto /system;
-  mount -o ro,remount -t auto /vendor 2>/dev/null;
 fi;
-
-debugging;
 
 if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanup)" == 1 ]; then
   cleanup;
 fi;
 
 umount /system;
-umount /vendor 2>/dev/null;
-umount /data 2>/dev/null;
-ui_print " ";
+umount /data;
 ui_print " ";
 ui_print "Done!";
