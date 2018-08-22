@@ -1,0 +1,68 @@
+make[1]: Entering directory '/home/infinitEplus/android/franken/kernel/xiaomi/msm8937/out'
+  GEN     ./Makefile
+scripts/kconfig/conf  --silentoldconfig Kconfig
+  CHK     include/config/kernel.release
+  GEN     ./Makefile
+  CHK     include/generated/uapi/linux/version.h
+  CHK     include/generated/utsrelease.h
+  Using .. as source for kernel
+  CHK     scripts/mod/devicetable-offsets.h
+  CHK     include/generated/bounds.h
+  CHK     include/generated/asm-offsets.h
+  CALL    ../scripts/checksyscalls.sh
+make[2]: 'include/generated/vdso-offsets.h' is up to date.
+  CHK     include/generated/compile.h
+../kernel/Makefile:145: *** No X.509 certificates found ***
+  CC      kernel/exit.o
+  GZIP    kernel/config_data.gz
+  CHK     kernel/config_data.h
+  CC      kernel/sched/qhmp_core.o
+  UPD     kernel/config_data.h
+  CC      kernel/configs.o
+  CC      kernel/sched/cputime.o
+  CC      fs/proc/base.o
+  CC      drivers/base/power/main.o
+  CC      drivers/base/power/opp/cpu.o
+  CC      drivers/cpufreq/cpufreq.o
+  CC      drivers/cpufreq/freq_table.o
+  CC      drivers/cpufreq/cpufreq_stats.o
+  LD      drivers/base/power/opp/built-in.o
+  CC      drivers/cpufreq/cpufreq_performance.o
+  CC      drivers/cpufreq/cpufreq_powersave.o
+  LD      fs/proc/proc.o
+  CC      drivers/cpufreq/cpufreq_userspace.o
+  LD      fs/proc/built-in.o
+  CC      drivers/devfreq/governor_cpufreq.o
+  LD      drivers/base/power/built-in.o
+  CC      drivers/cpufreq/cpufreq_ondemand.o
+  LD      drivers/base/built-in.o
+  CC      drivers/cpufreq/cpufreq_conservative.o
+  LD      fs/built-in.o
+  CC      kernel/sched/core_ctl.o
+  CC      drivers/cpufreq/cpufreq_interactive.o
+make[3]: *** No rule to make target 'drivers/cpufreq/cpufreq_nightmare.o', needed by 'drivers/cpufreq/built-in.o'.  Stop.
+make[3]: *** Waiting for unfinished jobs....
+  CC      drivers/cpufreq/cpufreq_governor.o
+  CC      drivers/fingerprint/goodix/gf_spi.o
+  LD      drivers/devfreq/built-in.o
+  LD      drivers/fingerprint/goodix/built-in.o
+  LD      drivers/fingerprint/built-in.o
+  CC      drivers/power/battery_current_limit.o
+  CC      drivers/thermal/msm_thermal.o
+make[2]: *** [../scripts/Makefile.build:410: drivers/cpufreq] Error 2
+make[2]: *** Waiting for unfinished jobs....
+  CC      drivers/soc/qcom/msm_rq_stats.o
+  CC      drivers/usb/gadget/android.o
+  CC      drivers/soc/qcom/msm_performance.o
+  LD      kernel/sched/built-in.o
+  LD      kernel/built-in.o
+  LD      drivers/power/built-in.o
+  LD      drivers/soc/qcom/built-in.o
+  LD      drivers/soc/built-in.o
+  LD      drivers/thermal/built-in.o
+  LD      drivers/usb/gadget/g_android.o
+  LD      drivers/usb/gadget/built-in.o
+  LD      drivers/usb/built-in.o
+make[1]: *** [/home/infinitEplus/android/franken/kernel/xiaomi/msm8937/Makefile:1004: drivers] Error 2
+make[1]: Leaving directory '/home/infinitEplus/android/franken/kernel/xiaomi/msm8937/out'
+make: *** [Makefile:145: sub-make] Error 2
