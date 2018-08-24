@@ -105,3 +105,4 @@ all.config
 # Binaries
 ipa_common
 out
+build-log.txt
