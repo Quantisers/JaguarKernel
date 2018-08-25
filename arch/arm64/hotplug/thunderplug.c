@@ -31,6 +31,7 @@
 
 #ifdef CONFIG_SCHED_HMP
 #define DRIVER_VERSION                5
+#define DRIVER_SUBVER		      0
 #else
 #define DRIVER_VERSION                3
 #define DRIVER_SUBVER                 0
