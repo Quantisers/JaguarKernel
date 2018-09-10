@@ -1512,11 +1512,11 @@ static int msm_vdec_queue_setup(struct vb2_queue *q,
 		 * than 4 subframes requires more than 4
 		 * reference frames to decode.
 		 */
-		if (inst->fmts[OUTPUT_PORT].fourcc ==
+		if (inst->fmts[OUTPUT_PORT]->fourcc ==
 				V4L2_PIX_FMT_VP9 &&
 				*num_buffers < MIN_NUM_OUTPUT_BUFFERS_VP9)
 			*num_buffers = MIN_NUM_OUTPUT_BUFFERS_VP9;
-		else if (inst->fmts[OUTPUT_PORT].fourcc ==
+		else if (inst->fmts[OUTPUT_PORT]->fourcc ==
 				V4L2_PIX_FMT_HEVC &&
 				*num_buffers < MIN_NUM_OUTPUT_BUFFERS_HEVC)
 			*num_buffers = MIN_NUM_OUTPUT_BUFFERS_HEVC;
