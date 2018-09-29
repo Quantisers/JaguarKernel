@@ -1,7 +1,6 @@
      # JagurarKernelCI (Semaphoreci)
 
-[![Build Status](https://semaphoreci.com/api/v1/infinity-plus/jagurarkernelci/branches/master/shields_badge.svg)](https://semaphoreci.com/infinity-plus/jagurarkernelci)
-     
+[![Build Status](https://semaphoreci.com/api/v1/quantummech2000/jaguarkernel-3/branches/treblev2/badge.svg)](https://semaphoreci.com/quantummech2000/jaguarkernel-3)     
      Linux kernel release 3.x <http://kernel.org/>
 
 These are the release notes for Linux version 3.  Read them carefully,
