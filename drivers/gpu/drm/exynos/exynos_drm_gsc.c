@@ -546,6 +546,9 @@ static int gsc_src_set_fmt(struct device *dev, u32 fmt)
 	case DRM_FORMAT_NV16:
 		cfg |= (GSC_IN_CHROMA_ORDER_CBCR | GSC_IN_YUV422_2P);
 		break;
+	case DRM_FORMAT_NV16:
+		cfg |= (GSC_IN_CHROMA_ORDER_CBCR | GSC_IN_YUV422_2P);
+		break;
 	default:
 		dev_err(ippdrv->dev, "invalid target yuv order 0x%x.\n", fmt);
 		return -EINVAL;
@@ -820,6 +823,9 @@ static int gsc_dst_set_fmt(struct device *dev, u32 fmt)
 		break;
 	case DRM_FORMAT_NV12:
 		cfg |= (GSC_OUT_CHROMA_ORDER_CBCR | GSC_OUT_YUV420_2P);
+		break;
+	case DRM_FORMAT_NV16:
+		cfg |= (GSC_OUT_CHROMA_ORDER_CBCR | GSC_OUT_YUV422_2P);
 		break;
 	case DRM_FORMAT_NV16:
 		cfg |= (GSC_OUT_CHROMA_ORDER_CBCR | GSC_OUT_YUV422_2P);
