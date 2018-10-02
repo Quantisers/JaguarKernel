@@ -39,7 +39,7 @@ AnyKernel2/zImage
 modules.builtin
 Module.symvers
 *.dwo
-
+kernel.sh
 #
 # Top-level generic files
 #
