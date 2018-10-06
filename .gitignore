@@ -51,7 +51,8 @@ Module.symvers
 /zImage
 /System.map
 /Module.markers
-
+/modules/*
+/out/*
 #
 # Debian directory (make deb-pkg)
 #
