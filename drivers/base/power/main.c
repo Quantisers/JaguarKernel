@@ -680,6 +680,10 @@ void dpm_resume_early(pm_message_t state)
 	struct device *dev;
 	ktime_t starttime = ktime_get();
 
+#ifdef CONFIG_BOEFFLA_WL_BLOCKER
+	pm_print_active_wakeup_sources();
+#endif
+
 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, true);
 	mutex_lock(&dpm_list_mtx);
 	pm_transition = state;
@@ -1355,8 +1359,10 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 
 	dpm_wait_for_children(dev, async);
 
-	if (async_error)
+	if (async_error) {
+		dev->power.direct_complete = false;
 		goto Complete;
+	}
 
 	/*
 	 * If a device configured to wake up the system from sleep states
@@ -1371,6 +1377,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 		pm_get_active_wakeup_sources(suspend_abort,
 			MAX_SUSPEND_ABORT_LEN);
 		log_suspend_abort_reason(suspend_abort);
+		dev->power.direct_complete = false;
 		async_error = -EBUSY;
 		goto Complete;
 	}
