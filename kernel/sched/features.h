@@ -36,16 +36,6 @@ SCHED_FEAT(CACHE_HOT_BUDDY, true)
  */
 SCHED_FEAT(WAKEUP_PREEMPTION, true)
 
-/*
- * Use arch dependent cpu capacity functions
- */
-SCHED_FEAT(ARCH_CAPACITY, false)
-
-/*
- *Use arch dependent cpu power functions
- */
-SCHED_FEAT(ARCH_POWER, true)
-
 SCHED_FEAT(HRTICK, false)
 SCHED_FEAT(DOUBLE_TICK, false)
 SCHED_FEAT(LB_BIAS, true)
@@ -59,11 +49,13 @@ SCHED_FEAT(NONTASK_CAPACITY, true)
  * Queue remote wakeups on the target CPU and process them
  * using the scheduler IPI. Reduces rq->lock contention/bounces.
  */
-SCHED_FEAT(TTWU_QUEUE, false)
+SCHED_FEAT(TTWU_QUEUE, true)
 
 SCHED_FEAT(FORCE_SD_OVERLAP, false)
 SCHED_FEAT(RT_RUNTIME_SHARE, true)
 SCHED_FEAT(LB_MIN, false)
+
+SCHED_FEAT(ATTACH_AGE_LOAD, true)
 
 /*
  * Apply the automatic NUMA scheduling policy. Enabled automatically
@@ -89,6 +81,8 @@ SCHED_FEAT(NUMA_FAVOUR_HIGHER, true)
 SCHED_FEAT(NUMA_RESIST_LOWER, false)
 #endif
 
-#ifdef CONFIG_SCHED_QHMP
-SCHED_FEAT(FORCE_CPU_THROTTLING_IMMINENT, false)
-#endif
+/*
+ * Energy aware scheduling. Use platform energy model to guide scheduling
+ * decisions optimizing for energy efficiency.
+ */
+SCHED_FEAT(ENERGY_AWARE, true)

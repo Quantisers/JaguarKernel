@@ -24,16 +24,6 @@ config CPU_FREQ_BOOST_SW
 	bool
 	depends on THERMAL
 
-config SCHED_FREQ_INPUT
-	bool "Scheduler inputs to cpufreq governor"
-	depends on SCHED_HMP
-	help
-	  This option enables support for scheduler based CPU utilization
-	  calculations which may then be used by any cpufreq governor. The
-	  scheduler keeps track of "recent" cpu demand of tasks, which can
-	  help determine need for changing frequency well in advance of what
-	  a governor would have been able to detect on its own.
-
 config CPU_FREQ_STAT
 	tristate "CPU frequency translation statistics"
 	default y
@@ -165,6 +155,69 @@ config CPU_FREQ_DEFAULT_GOV_CULTIVATION
 	help
 	Use the CPUFreq governor 'cultivation' as default.
 
+config CPU_FREQ_DEFAULT_GOV_YANKACTIVE
+ 	   bool "yankactive"
+  	   select CPU_FREQ_GOV_YANKACTIVE
+	   help
+	   Use the CPUFreq governor 'yankactive' as default. This allows
+	   you to get a full dynamic cpu frequency capable system by simply
+	   loading your cpufreq low-level hardware driver, using the
+	   'yankactive' governor for latency-sensitive workloads.
+
+
+config CPU_FREQ_DEFAULT_GOV_UMBRELLA_CORE
+	bool "umbrella_core"
+	select CPU_FREQ_GOV_UMBRELLA_CORE
+	help
+
+config CPU_FREQ_DEFAULT_GOV_BARRY_ALLEN
+	bool "barry_allen"
+	select CPU_FREQ_GOV_BARRY_ALLEN
+	help
+	  Use the CPUFreq governor 'barry_allen' as default. This allows
+	  you to get a full dynamic cpu frequency capable system by simply
+	  loading your cpufreq low-level hardware driver, using the
+	  'barry_allen' governor for latency-sensitive workloads.
+
+
+config CPU_FREQ_DEFAULT_GOV_ONDEMANDX
+	bool "ondemandx"
+	select CPU_FREQ_GOV_ONDEMANDX
+	help
+	  Use the CPUFreq governor 'ondemandx' as default. See 
+	  ondemandx governor help for more details.
+
+
+config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
+	bool "interactivex"
+	select CPU_FREQ_GOV_INTERACTIVEX
+	help
+	  Use the CPUFreq governor 'interactivex' as default. See
+	  interactivex governor help for more details.
+
+
+config CPU_FREQ_DEFAULT_GOV_SAKURACTIVE
+	   bool "sakuractive"
+	   select CPU_FREQ_GOV_SAKURACTIVE
+	   select CPU_FREQ_GOV_PERFORMANCE
+	   help
+	      Use the CPUFreq governor 'sakuractive' as default. This allows you
+	      to get a full dynamic frequency capable system with CPU
+	      hotplug support by simply loading your cpufreq low-level
+	      hardware driver.  Be aware that not all cpufreq drivers
+	      support the hotplug governor. If unsure have a look at
+	      the help section of the driver. Fallback governor will be the
+	      performance governor.
+	      
+config CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
+	bool "schedutil"
+	depends on SMP
+	select CPU_FREQ_GOV_SCHEDUTIL
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the 'schedutil' CPUFreq governor by default. If unsure,
+	  have a look at the help section of that governor. The fallback
+	  governor will be 'performance'.
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -304,6 +357,23 @@ config CPU_FREQ_GOV_SCHED
 
 	  If in doubt, say N.
 
+config CPU_FREQ_GOV_SCHEDUTIL
+	bool "'schedutil' cpufreq policy governor"
+	depends on CPU_FREQ && SMP
+	select CPU_FREQ_GOV_ATTR_SET
+	select IRQ_WORK
+	help
+	  This governor makes decisions based on the utilization data provided
+	  by the scheduler.  It sets the CPU frequency to be proportional to
+	  the utilization/capacity ratio coming from the scheduler.  If the
+	  utilization is frequency-invariant, the new frequency is also
+	  proportional to the maximum available frequency.  If that is not the
+	  case, it is proportional to the current frequency of the CPU.  The
+	  frequency tipping point is at utilization/capacity equal to 80% in
+	  both cases.
+
+	  If in doubt, say N.
+
 comment "CPU frequency scaling drivers"
 
 config CPUFREQ_DT
@@ -318,10 +388,6 @@ config CPUFREQ_DT
 	  systems which share clock and voltage across all CPUs.
 
 	  If in doubt, say N.
-
-config FINGERPRINT_BOOST
-	bool "Fingerprint Boost"
-	default y
 
 config CPU_FREQ_GOV_LIONFISH
 	tristate "'lionfish' governor"
