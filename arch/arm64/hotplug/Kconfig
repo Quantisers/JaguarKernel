@@ -13,4 +13,13 @@ config ALUCARD_CONTROL
 	depends on CUSTOM_HOTPLUG
 	help
 	  Known for being battery friendly. Developed by Alucard_24@XDA
+config AUTOSMP
+	bool "Multi-core automatic hotplug support"
+	depends on SMP && HOTPLUG_CPU
+	default n
+	help
+	  Automatically hotplugs the multiple cpu cores on and off
+	  based on cpu load and suspend state.
+
+
 endmenu

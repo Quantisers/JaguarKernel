@@ -1,4 +1,4 @@
-#
+w#
 # Automatically generated file; DO NOT EDIT.
 # Linux/arm64 3.18.124 Kernel Configuration
 #
@@ -1073,6 +1073,7 @@ CONFIG_HAVE_BPF_JIT=y
 CONFIG_CUSTOM_HOTPLUG=y
 CONFIG_THUNDERPLUG_CONTROL=y
 CONFIG_ALUCARD_CONTROL=y
+CONFIG_AUTOSMP=y
 #
 # Device Drivers
 CONFIG_STATE_NOTIFIER=y
