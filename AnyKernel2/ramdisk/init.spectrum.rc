@@ -1,0 +1,237 @@
+# SPECTRUM KERNEL MANAGER
+# Ramdisk file for profile based kernel management
+# Implimentation inspired by Franco's fku profiles
+
+# Initialization
+on property:sys.boot_completed=1
+   # Set default profile on first boot
+   exec u:r:init:s0 root root -- /init.spectrum.sh
+   exec u:r:su:s0 root root -- /init.spectrum.sh
+   # Enable Spectrum support
+   setprop spectrum.support 1
+   # Add kernel name
+   setprop persist.spectrum.kernel Jaguar
+
+# Balance (default profile)
+on property:persist.spectrum.profile=0
+write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 39000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 768000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 1 768000:90
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 0
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 0
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 80000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:39000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 85
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1094400
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 1 960000:85 1094400:90 1344000:80
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 0
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 0
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 80000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1094400
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1401000
+
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+	write /sys/class/devfreq/soc\:qcom,cpubw/governor bw_hwmon
+	write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 216000000
+	write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 450000000
+	write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/device/kgsl/kgsl-3d0/default_pwrlevel 3
+
+    write /sys/block/mmcblk0/queue/scheduler cfq
+    write /sys/module/workqueue/parameters/power_efficient 0
+	write /proc/sys/kernel/random/read_wakeup_threshold 64
+	write /proc/sys/kernel/random/write_wakeup_threshold 896
+
+	write /sys/module/lowmemorykiller/parameters/enable_adaptive_lm 0
+	write /sys/module/lowmemorykiller/parameters/minfree 18432,23040,27648,32256,55296,80640
+	write /sys/module/lowmemorykiller/parameters/cost 32
+	write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
+	write /proc/sys/vm/swappiness 100
+	write /proc/sys/vm/vfs_cache_pressure 100
+	write /proc/sys/vm/min_free_kbytes 6764
+	write /proc/sys/vm/dirty_ratio 20
+	write /proc/sys/vm/dirty_background_ratio 5
+	write /proc/sys/vm/dirty_expire_centisecs 200
+	write /proc/sys/vm/dirty_writeback_centisecs 500
+
+# Performance
+on property:persist.spectrum.profile=1
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 80
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 998400
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 80
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 80000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 99000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 80
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1209600
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80 1248000:90 1344000:80 1401000:95
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 80000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 99000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1094400
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1401000
+
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+	write /sys/class/devfreq/soc\:qcom,cpubw/governor performance
+	write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 375000000
+	write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 450000000
+	write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/device/kgsl/kgsl-3d0/default_pwrlevel 3
+
+    write /sys/block/mmcblk0/queue/scheduler fiops
+    write /sys/module/workqueue/parameters/power_efficient 0
+	write /proc/sys/kernel/random/read_wakeup_threshold 1024
+	write /proc/sys/kernel/random/write_wakeup_threshold 128
+
+	write /sys/module/lowmemorykiller/parameters/enable_adaptive_lm 1
+	write /sys/module/lowmemorykiller/parameters/minfree 18432,23040,27648,51256,89600,115200
+	write /sys/module/lowmemorykiller/parameters/cost 32
+	write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 128000
+	write /proc/sys/vm/swappiness 0
+	write /proc/sys/vm/vfs_cache_pressure 100
+	write /proc/sys/vm/min_free_kbytes 12288
+	write /proc/sys/vm/dirty_ratio 20
+	write /proc/sys/vm/dirty_background_ratio 5
+	write /proc/sys/vm/dirty_expire_centisecs 200
+	write /proc/sys/vm/dirty_writeback_centisecs 1500
+
+# Battery
+on property:persist.spectrum.profile=2
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 99
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 768000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 80
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 60000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 10000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 10000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 99
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1094400
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80 1248000:90 1344000:80 1401000:95
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 60000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 10000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 10000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 998400
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1248000
+
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor powersave
+	write /sys/class/devfreq/soc\:qcom,cpubw/governor powersave
+	write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 216000000
+	write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 300000000
+	write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/device/kgsl/kgsl-3d0/default_pwrlevel 5
+
+    write /sys/block/mmcblk0/queue/scheduler noop
+    write /sys/module/workqueue/parameters/power_efficient 1
+	write /proc/sys/kernel/random/read_wakeup_threshold 128
+	write /proc/sys/kernel/random/write_wakeup_threshold 64
+
+	write /sys/module/lowmemorykiller/parameters/enable_adaptive_lm 0
+	write /sys/module/lowmemorykiller/parameters/minfree 18432,23040,27648,32256,55296,80640
+	write /sys/module/lowmemorykiller/parameters/cost 32
+	write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 128000
+	write /proc/sys/vm/swappiness 60
+	write /proc/sys/vm/vfs_cache_pressure 10
+	write /proc/sys/vm/min_free_kbytes 6764
+	write /proc/sys/vm/dirty_ratio 90
+	write /proc/sys/vm/dirty_background_ratio 70
+	write /proc/sys/vm/dirty_expire_centisecs 250
+	write /proc/sys/vm/dirty_writeback_centisecs 500
+
+# Gaming
+on property:persist.spectrum.profile=3
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 10000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 75
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 998400
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 80
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 80000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 99000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 20000 1094400:20000 1209600:20000 1401000:39000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 75
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1344000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80 1248000:90 1344000:80 1401000:95
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 80000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 99000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 20000
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1094400
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1401000
+
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor performance
+	write /sys/class/devfreq/soc\:qcom,cpubw/governor performance
+	write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 375000000
+	write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 500000000
+	write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/device/kgsl/kgsl-3d0/default_pwrlevel 3
+
+    write /sys/block/mmcblk0/queue/scheduler deadline
+    write /sys/module/workqueue/parameters/power_efficient 0
+	write /proc/sys/kernel/random/read_wakeup_threshold 1024
+	write /proc/sys/kernel/random/write_wakeup_threshold 128
+
+	write /sys/module/lowmemorykiller/parameters/enable_adaptive_lm 1
+	write /sys/module/lowmemorykiller/parameters/minfree 18432,23040,27648,51256,150296,200640
+	write /sys/module/lowmemorykiller/parameters/cost 16
+	write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 202640
+	write /proc/sys/vm/swappiness 70
+	write /proc/sys/vm/vfs_cache_pressure 500
+	write /proc/sys/vm/min_free_kbytes 8192
+	write /proc/sys/vm/dirty_ratio 10
+	write /proc/sys/vm/dirty_background_ratio 10
+	write /proc/sys/vm/dirty_expire_centisecs 500
+	write /proc/sys/vm/dirty_writeback_centisecs 100

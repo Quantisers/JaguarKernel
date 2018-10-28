@@ -41,6 +41,14 @@ insert_line fstab.qcom "data        f2fs" before "data        ext4" "/dev/block/
 insert_line fstab.qcom "cache        f2fs" after "data        ext4" "/dev/block/bootdevice/by-name/cache     /cache        f2fs    nosuid,nodev,noatime,inline_xattr,flush_merge,data_flush wait,formattable,check";
 fi;
 
+#Spectrum
+if [ -e init.qcom.rc ]; then
+backup_file init.qcom.rc;
+insert_line init.qcom.rc "init.spectrum.rc" before "import init.qcom.usb.rc" "import /init.spectrum.rc";
+else
+backup_file init.rc;
+insert_line init.rc "init.spectrum.rc" before "import /init.usb.rc" "import /init.spectrum.rc";
+fi;
 # end ramdisk changes
 
 write_boot;
