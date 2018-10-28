@@ -29,7 +29,7 @@
 #ifdef CONFIG_MSM_PM
 #include "lpm-levels.h"
 #include <linux/workqueue.h>
-
+#endif
 /**
  * struct alarm_base - Alarm timer bases
  * @lock:		Lock for syncrhonized access to the base
