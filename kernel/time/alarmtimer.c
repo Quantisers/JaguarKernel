@@ -494,10 +494,7 @@ static int alarmtimer_resume(struct device *dev)
 		return 0;
 	rtc_timer_cancel(rtc, &rtctimer);
 
-<<<<<<< HEAD
-=======
 	queue_delayed_work(power_off_alarm_workqueue, &work, 0);
->>>>>>> 1eb7a27... rtc: alarm: Add power-on alarm feature
 	return 0;
 }
 
