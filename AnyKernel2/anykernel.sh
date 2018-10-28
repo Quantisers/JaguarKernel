@@ -5,7 +5,8 @@
 # begin properties
 properties() { '
 do.devicecheck=1
-do.modules=0
+do.modules=y
+do.system=y
 do.cleanup=1
 do.cleanuponabort=1
 device.name1=santoni
