@@ -298,9 +298,6 @@
 			compatible = "qcom,spm-regulator";
 			reg = <0x2000 0x100>;
 			qcom,mode = "pwm";
-			qcom,ocp-enable = <0>;
-			qcom,auto-mode-enable = <0>;
-			qcom,hpm-enable = <1>;
 			qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 			regulator-name = "pm8937_s5";
 			regulator-min-microvolt = <1000000>;
@@ -365,8 +362,8 @@
 		regulator-max-microvolt = <10>;
 
 		qcom,cpr-fuse-corners = <3>;
-		qcom,cpr-voltage-ceiling = <1125000 1225000 1345000>;
-		qcom,cpr-voltage-floor =   <1045000 1185000 1265000>; //overvolt higher clock rates.
+		qcom,cpr-voltage-ceiling = <1130000 1225000 1350000>;
+		qcom,cpr-voltage-floor =   <1050000 1150000 1265000>; //overvolt higher clock rates.
 		vdd-apc-supply = <&pm8937_s5>;
 
 		mem-acc-supply = <&mem_acc_vreg_corner>;
@@ -381,14 +378,14 @@
 		qcom,cpr-down-threshold = <4>;
 		qcom,cpr-idle-clocks = <15>;
 		qcom,cpr-gcnt-time = <1>;
-		qcom,vdd-apc-step-up-limit = <2>;
+		qcom,vdd-apc-step-up-limit = <1>;
 		qcom,vdd-apc-step-down-limit = <1>;
 		qcom,cpr-apc-volt-step = <5000>;
 
 		qcom,cpr-fuse-row = <67 0>;
 		qcom,cpr-fuse-target-quot = <42 24 6>;
 		qcom,cpr-fuse-ro-sel = <60 57 54>;
-		qcom,cpr-init-voltage-ref = <1125000 1225000 1345000>;
+		qcom,cpr-init-voltage-ref = <1130000 1225000 1350000>;
 		qcom,cpr-fuse-init-voltage =
 					<67 36 6 0>,
 					<67 18 6 0>,
@@ -435,9 +432,7 @@
 				<(10000)     (15000)	(20000)>,
 				<0		0	      0>,
 				<0		0	      0>;
-		qcom,cpr-thermal-sensor-id = <9>;
-		qcom,cpr-disable-temp-threshold = <5>;
-		qcom,cpr-enable-temp-threshold = <10>;
+		qcom,cpr-enable;
 	};
 
 	eldo2_pm8937: eldo2 {
